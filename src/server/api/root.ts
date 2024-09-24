@@ -1,5 +1,6 @@
 import { vinRouter } from "~/server/api/routers/vin";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { makeRouter } from "./routers/make";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   vin: vinRouter,
+  make: makeRouter,
 });
 
 // export type definition of API
