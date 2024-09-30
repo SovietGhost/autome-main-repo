@@ -46,10 +46,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/automobiles"
+                  href="/auctions"
                   className="text-gray-400 hover:text-white"
                 >
-                  Avtomobillər
+                  Hərraclar
                 </Link>
               </li>
               <li>
@@ -68,11 +68,11 @@ export default function Footer() {
           <div>
             <h3 className="mb-4 text-lg font-semibold">Digər linklər</h3>
             <ul className="space-y-2">
-              <li>
+              {/* <li>
                 <Link href="/favorite" className="text-gray-400 hover:text-white">
                   Sevimli
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/vin-check" className="text-gray-400 hover:text-white">
                   VIN Check
@@ -89,7 +89,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-400 hover:text-white">
+                <Link href="/seller-info" className="text-gray-400 hover:text-white">
                   Satıcı məlumatları
                 </Link>
               </li>

@@ -72,8 +72,12 @@ const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
 
 function routeToAzerbaijani(segment: string) {
   switch (segment) {
+    case "view":
+      return "Baxış";
     case "about":
       return "Haqqında";
+    case "create":
+      return "Elan et";
     case "auctions":
       return "Hərraclar";
     case "rules":
@@ -82,6 +86,8 @@ function routeToAzerbaijani(segment: string) {
       return "Əlaqə";
     case "vin-check":
       return "VIN yoxlama";
+    case "account":
+      return "Hesab məlumatları";
     default:
       return segment;
   }
@@ -133,9 +139,11 @@ export default function Navbar() {
           <NavLinks inNavbar />
         </nav>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm">
-            Elan et
-          </Button>
+          <Link href={"/auctions/create"}>
+            <Button variant="ghost" size="sm">
+              Elan et
+            </Button>
+          </Link>
           <ClerkLoaded>
             <>
               <SignedIn>

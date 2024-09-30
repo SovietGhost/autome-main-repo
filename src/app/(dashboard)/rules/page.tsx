@@ -36,7 +36,7 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="rounded-xl bg-white p-5 md:w-[calc(50%-2rem)]">
-                  <span className="text-red-600">1.</span>
+                  <span className="text-red-600">2.</span>
                   <h2 className="mb-5 mt-2 text-lg">Ümumi qaydalar </h2>
                   <ul className="list-disc pl-5 text-[#44415A]">
                     <li>
@@ -55,7 +55,7 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="rounded-xl bg-white p-5 md:w-[calc(50%-2rem)]">
-                  <span className="text-red-600">2.</span>
+                  <span className="text-red-600">3.</span>
                   <h2 className="mb-5 mt-2 text-lg">Alıcılar</h2>
                   <ul className="list-disc pl-5 text-[#44415A]">
                     <li>
@@ -75,7 +75,7 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="rounded-xl bg-white p-5 md:w-[calc(50%-2rem)]">
-                  <span className="text-red-600">2.</span>
+                  <span className="text-red-600">4.</span>
                   <h2 className="mb-5 mt-2 text-lg">Alıcılar</h2>
                   <ul className="list-disc pl-5 text-[#44415A]">
                     <li>

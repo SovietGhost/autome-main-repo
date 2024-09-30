@@ -113,7 +113,6 @@ export const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
 
   return next({
     ctx: {
-      ...ctx,
       auth: {
         ...ctx.auth,
         userId: ctx.auth.userId,
