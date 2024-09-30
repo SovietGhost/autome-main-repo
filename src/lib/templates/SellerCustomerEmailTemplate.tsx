@@ -47,12 +47,12 @@ export const WelcomeEmail = ({
           <Text style={text}>Message:</Text>
           <Text style={text}>{message}</Text>
           <Text style={text}>
-            We're thrilled to welcome you to AUTOME.AZ, the premier destination
-            for buying and selling cars in Azerbaijan. Whether you're looking
-            for your dream car or wanting to sell your current vehicle, we've
+            We&apos;re thrilled to welcome you to AUTOME.AZ, the premier destination
+            for buying and selling cars in Azerbaijan. Whether you&apos;re looking
+            for your dream car or wanting to sell your current vehicle, we&apos;ve
             got you covered.
           </Text>
-          <Text style={text}>Here's what you can do on AUTOME.AZ:</Text>
+          <Text style={text}>Here&apos;s what you can do on AUTOME.AZ:</Text>
           <ul>
             <li style={listItem}>Browse thousands of car listings</li>
             <li style={listItem}>Post your own car for sale</li>

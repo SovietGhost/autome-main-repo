@@ -159,11 +159,7 @@ export const auctionRouter = createTRPCRouter({
 
       console.log(`auction-${auction.id}`, "new-bid", {});
       try {
-        const response = await pusher.trigger(
-          `auction-${auction.id}`,
-          "new-bid",
-          {},
-        );
+        await pusher.trigger(`auction-${auction.id}`, "new-bid", {});
       } catch (error) {
         console.error(error);
       }

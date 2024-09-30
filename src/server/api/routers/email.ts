@@ -2,7 +2,6 @@ import { z } from "zod";
 import { Resend } from "resend";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { env } from "~/env";
-import { clerkClient } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 import WelcomeEmail from "~/lib/templates/SellerCustomerEmailTemplate";
 
@@ -17,7 +16,7 @@ export const emailRouter = createTRPCRouter({
         message: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const { email, fullName, message } = input;
       // const userData = await clerkClient().users.getUser(ctx.auth.userId);
       // if (

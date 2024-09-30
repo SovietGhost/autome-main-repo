@@ -286,7 +286,7 @@ function Calendar({
         range_middle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
         hidden: 'invisible',
         ...classNames,
-      }}
+      } as any}
       components={{
         Chevron: ({ ...props }) =>
           props.orientation === 'left' ? (
@@ -294,7 +294,7 @@ function Calendar({
           ) : (
             <ChevronRight className="h-4 w-4" />
           ),
-        MonthCaption: ({ calendarMonth }) => {
+        MonthCaption: ({ calendarMonth }: any) => {
           return (
             <div className="inline-flex gap-2">
               <Select
@@ -338,10 +338,10 @@ function Calendar({
             </div>
           );
         },
-      }}
+      } as any}
       {...props}
     />
-  );
+  ) as any;
 }
 Calendar.displayName = 'Calendar';
 
