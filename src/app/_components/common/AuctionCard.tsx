@@ -76,7 +76,7 @@ export default function AuctionCard({
           <div>₼{auction.bids[0]?.amount ?? auction.start_price}</div>
         </div>
         <div className="flex space-x-2">
-          <Link href={`/auctions/view/${auction.id}`}>
+          <Link href={`/auctions/${auction.id}`}>
           <Button variant="destructive">Daxil ol →</Button>
           </Link>
           <Button variant="outline" size="icon">
