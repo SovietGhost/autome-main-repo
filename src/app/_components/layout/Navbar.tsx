@@ -110,11 +110,11 @@ const BreadCrumpHeader = () => {
             </BreadcrumbLink>
           </BreadcrumbItem>
 
-          {segments.map((segment, index) => (
+          {segments.map((segment, index, array) => (
             <Fragment key={index}>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink className="text-black" href={"/" + segment}>
+                <BreadcrumbLink className="text-black" href={"/" + array.slice(0, index + 1).join("/")}>
                   {routeToAzerbaijani(segment)}
                 </BreadcrumbLink>
               </BreadcrumbItem>

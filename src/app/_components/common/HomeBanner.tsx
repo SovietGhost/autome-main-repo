@@ -17,15 +17,15 @@ export default function HomeBanner() {
             </p>
             <div className="mt-10 flex flex-col gap-8 md:mb-10 md:mt-[70px] md:flex-row md:gap-12 lg:mb-0">
               <Link
-                href="/automobiles"
+                href="/auctions"
                 className="flex w-full items-center justify-center rounded-xl bg-red-600 px-10 py-4 text-center text-sm duration-300 hover:bg-[#D00B0B] md:w-fit"
               >
-                İndi başla
+                Hərraclara get
               </Link>
 
               <Link
                 className="w-full rounded-xl bg-white px-10 py-4 text-center text-sm text-black duration-300 hover:bg-[#ffffffd8] md:w-fit"
-                href="/auction/add"
+                href="/auction/create"
               >
                 Elan et
               </Link>
