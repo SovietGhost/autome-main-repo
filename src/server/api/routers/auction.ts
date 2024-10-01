@@ -141,7 +141,10 @@ export const auctionRouter = createTRPCRouter({
         });
       }
 
-      if (auction.bids[0] && auction.bids[0].amount >= input.amount) {
+      if (
+        (auction.bids[0] && auction.bids[0].amount >= input.amount) ||
+        input.amount < auction.start_price
+      ) {
         throw new TRPCError({
           message: "Yeni təklif ən yüksək təklifdən böyük olmalıdır",
           code: "FORBIDDEN",
