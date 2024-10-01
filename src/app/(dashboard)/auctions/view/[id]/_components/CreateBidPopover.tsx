@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
   const router = useRouter();
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState("0");
   const [open, setOpen] = useState(false);
   const mutation = api.auction.createBid.useMutation({
     onSuccess: () => {
@@ -23,8 +23,13 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
       router.refresh();
     },
     onError(error, variables, context) {
-      toast(error.message);
-      setOpen(false);
+      if (typeof JSON.parse(error.message) !== "string") {
+        toast("Ümumi xəta baş verdi");
+        setOpen(false);
+      } else {
+        toast(error.message);
+        setOpen(false);
+      }
     },
   });
 
@@ -42,7 +47,7 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
             <Input
               id="amount"
               value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
+              onChange={(e) => setAmount(e.target.value)}
             />
           </div>
           <Button
@@ -50,12 +55,11 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
             onClick={() => {
               mutation.mutate({
                 auctionId,
-                amount,
+                amount: parseInt(amount, 10),
               });
             }}
           >
-            {" "}
-            Təklif etmək{" "}
+            Təklif etmək
           </Button>
         </div>
       </PopoverContent>
