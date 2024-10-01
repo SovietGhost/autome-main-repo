@@ -23,8 +23,7 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
       router.refresh();
     },
     onError(error, variables, context) {
-      console.log(typeof error.message, error.message, error);
-      toast(error.message);
+      toast(error.message[0] === "[" ? "Xəta baş verdi" : error.message);
       setOpen(false);
     },
   });
@@ -42,6 +41,7 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
             <Label htmlFor="amount"> Məbləğ </Label>
             <Input
               id="amount"
+              type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
