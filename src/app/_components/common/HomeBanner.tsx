@@ -25,7 +25,7 @@ export default function HomeBanner() {
 
               <Link
                 className="w-full rounded-xl bg-white px-10 py-4 text-center text-sm text-black duration-300 hover:bg-[#ffffffd8] md:w-fit"
-                href="/auction/create"
+                href="/auctions/create"
               >
                 Elan et
               </Link>
