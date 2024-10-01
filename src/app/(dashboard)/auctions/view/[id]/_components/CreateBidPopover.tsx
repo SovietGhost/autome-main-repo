@@ -23,7 +23,7 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
       router.refresh();
     },
     onError(error, variables, context) {
-      console.log(typeof error.message, error.message);
+      console.log(typeof error.message, error.message, error);
       toast(error.message);
       setOpen(false);
     },

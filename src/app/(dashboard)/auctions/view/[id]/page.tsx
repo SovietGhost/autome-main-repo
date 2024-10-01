@@ -13,6 +13,7 @@ import AuctionViewCountdown from "~/app/_components/common/AuctionViewCountdown"
 import CreateBidPopover from "./_components/CreateBidPopover";
 import OldBidders from "./_components/OldBidders";
 import AuctionMetadata from "./_components/Metadata";
+import { Auction } from "@prisma/client";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id, 10);
@@ -21,7 +22,18 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  const auction = await api.auction.get(id);
+  let auction: Auction & {
+    bids: {
+      amount: number;
+      user_id: string;
+    }[];
+  };
+
+  try {
+    auction = await api.auction.get(id);
+  } catch (error) {
+    notFound();
+  }
 
   return (
     <>
