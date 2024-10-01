@@ -22,7 +22,7 @@ export default function RootLayout({
         <body>
           <TRPCReactProvider>
             {children}
-            <Toaster />
+            <Toaster position="top-center" />
           </TRPCReactProvider>
         </body>
       </html>

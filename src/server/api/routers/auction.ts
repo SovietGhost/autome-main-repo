@@ -1,3 +1,4 @@
+import { Bid } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
@@ -151,20 +152,42 @@ export const auctionRouter = createTRPCRouter({
         });
       }
 
-      const bid = await ctx.db.bid.create({
-        data: {
-          amount: input.amount,
-          user_id: auth.userId,
-          auction_id: auction.id,
-          enabled: true,
-        },
-      });
+      if (auction.bids[0] && input.amount - auction.bids[0].amount < 50 || input.amount - auction.start_price < 50) {
+        throw new TRPCError({
+          message: "Yeni təklif ən yüksək təklifdən 50 AZN-dən çox olmalıdır",
+          code: "FORBIDDEN",
+        });
+      }
+
+      let bid: Bid;
+
+      try {
+        bid = await ctx.db.bid.create({
+          data: {
+            amount: input.amount,
+            user_id: auth.userId,
+            auction_id: auction.id,
+            enabled: true,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        throw new TRPCError({
+          message: "Təklif verilərkən xəta baş verdi",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
 
       console.log(`auction-${auction.id}`, "new-bid", {});
+
       try {
         await pusher.trigger(`auction-${auction.id}`, "new-bid", {});
       } catch (error) {
         console.error(error);
+        throw new TRPCError({
+          message: "Təklif verilərkən xəta baş verdi",
+          code: "INTERNAL_SERVER_ERROR",
+        });
       }
 
       return bid;
