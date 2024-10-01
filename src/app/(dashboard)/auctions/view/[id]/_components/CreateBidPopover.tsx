@@ -23,13 +23,9 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
       router.refresh();
     },
     onError(error, variables, context) {
-      if (typeof JSON.parse(error.message) !== "string") {
-        toast("Ümumi xəta baş verdi");
-        setOpen(false);
-      } else {
-        toast(error.message);
-        setOpen(false);
-      }
+      console.log(typeof error.message, error.message);
+      toast(error.message);
+      setOpen(false);
     },
   });
 
