@@ -1,5 +1,5 @@
 "use client";
-
+import { env } from "~/env"
 import { useFormState } from "react-dom";
 import { createAuction } from "~/app/actions/create_auction";
 import BrandSelect from "./BrandSelect";
@@ -17,7 +17,21 @@ import TrailingSelect from "./TrailingSelect";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "sonner";
 
-export default function CreateAuctionForm() {
+export default function CreateAuctionForm({
+  firstImageURL,
+  secondImageURL,
+  thirdImageURL,
+  fourthImageURL,
+  fifthImageURL,
+  sixthImageURL,
+}: {
+  firstImageURL: string;
+  secondImageURL: string;
+  thirdImageURL: string;
+  fourthImageURL: string;
+  fifthImageURL: string;
+  sixthImageURL: string;
+}) {
   const [state, action] = useFormState(createAuction, undefined);
 
   const [name, setName] = useState("");
@@ -39,14 +53,14 @@ export default function CreateAuctionForm() {
   const [startPrice, setStartPrice] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [insurancePaper, setInsurancePaper] = useState<File | null>(null);
+
+  const [insurancePaper, setInsurancePaper] = useState<string>("");
   const [techinalInspectionPaper, setTechinalInspectionPaper] =
-    useState<File | null>(null);
-  // const [images, setImages] = useState<File[]>([]);
-  const [frontImage, setFrontImage] = useState<File | null>(null);
-  const [backImage, setBackImage] = useState<File | null>(null);
-  const [sideImage, setSideImage] = useState<File | null>(null);
-  const [otherImage, setOtherImage] = useState<File | null>(null);
+    useState<string>("");
+  const [frontImage, setFrontImage] = useState<string>("");
+  const [backImage, setBackImage] = useState<string>("");
+  const [sideImage, setSideImage] = useState<string>("");
+  const [otherImage, setOtherImage] = useState<string>("");
 
   useEffect(() => {
     if (state?.error) {
@@ -215,7 +229,22 @@ export default function CreateAuctionForm() {
           required
           id="insurance"
           type="file"
-          onChange={(e) => setInsurancePaper(e.target.files?.[0] ?? null)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            const upload = await fetch(firstImageURL, {
+              method: 'PUT',
+              body: file,
+              headers: { 'Content-Type': file?.type ?? '' },
+            });
+
+            if (upload.ok) {
+              console.log('Uploaded successfully!');
+              console.log(await upload.text());
+              setInsurancePaper(env.NEXT_PUBLIC_FILES_URL + file?.name);
+            } else {
+              console.error('Upload failed.');
+            }
+          }}
         />
       </div>
       <div>
@@ -224,8 +253,24 @@ export default function CreateAuctionForm() {
           required
           id="techinal"
           type="file"
-          onChange={(e) =>
-            setTechinalInspectionPaper(e.target.files?.[0] ?? null)
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            const upload = await fetch(secondImageURL, {
+              method: 'PUT',
+              body: file,
+              headers: { 'Content-Type': file?.type ?? '' },
+            });
+
+
+            if (upload.ok) {
+              console.log('Uploaded successfully!');
+              console.log(await upload.text());
+              setTechinalInspectionPaper(env.NEXT_PUBLIC_FILES_URL + file?.name);
+            } else {
+              console.error('Upload failed.');
+            }
+          }
+
           }
         />
       </div>
@@ -236,7 +281,22 @@ export default function CreateAuctionForm() {
           required
           id="front-images"
           type="file"
-          onChange={(e) => setFrontImage(e.target.files?.[0] ?? null)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            const upload = await fetch(thirdImageURL, {
+              method: 'PUT',
+              body: file,
+              headers: { 'Content-Type': file?.type ?? '' },
+            });
+
+            if (upload.ok) {
+              console.log('Uploaded successfully!');
+              console.log(await upload.text());
+              setFrontImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+            } else {
+              console.error('Upload failed.');
+            }
+          }}
         />
       </div>
       <div>
@@ -245,7 +305,22 @@ export default function CreateAuctionForm() {
           required
           id="back-images"
           type="file"
-          onChange={(e) => setBackImage(e.target.files?.[0] ?? null)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            const upload = await fetch(fourthImageURL, {
+              method: 'PUT',
+              body: file,
+              headers: { 'Content-Type': file?.type ?? '' },
+            });
+
+            if (upload.ok) {
+              console.log('Uploaded successfully!');
+              console.log(await upload.text());
+              setBackImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+            } else {
+              console.error('Upload failed.');
+            }
+          }}
         />
       </div>
       <div>
@@ -254,7 +329,22 @@ export default function CreateAuctionForm() {
           required
           id="side-images"
           type="file"
-          onChange={(e) => setSideImage(e.target.files?.[0] ?? null)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            const upload = await fetch(fifthImageURL, {
+              method: 'PUT',
+              body: file,
+              headers: { 'Content-Type': file?.type ?? '' },
+            });
+
+            if (upload.ok) {
+              console.log('Uploaded successfully!');
+              console.log(await upload.text());
+              setSideImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+            } else {
+              console.error('Upload failed.');
+            }
+          }}
         />
       </div>
       <div>
@@ -262,7 +352,22 @@ export default function CreateAuctionForm() {
         <Input
           id="other-images"
           type="file"
-          onChange={(e) => setOtherImage(e.target.files?.[0] ?? null)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            const upload = await fetch(sixthImageURL, {
+              method: 'PUT',
+              body: file,
+              headers: { 'Content-Type': file?.type ?? '' },
+            });
+
+            if (upload.ok) {
+              console.log('Uploaded successfully!');
+              console.log(await upload.text());
+              setOtherImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+            } else {
+              console.error('Upload failed.');
+            }
+          }}
         />
       </div>
       <div>

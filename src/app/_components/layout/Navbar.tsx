@@ -34,32 +34,32 @@ const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
 
   return (
     <>
-      <Link href="/about" className={`block py-2 hover:text-red-600`}>
-        <div className="flex flex-col items-center">
+      <Link href="/about" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+        <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Haqqında</span>
           {inNavbar && segment === "about" && (
             <div className="h-1 w-[50%] rounded bg-red-600"></div>
           )}
         </div>
       </Link>
-      <Link href="/auctions" className={`block py-2 hover:text-red-600`}>
-        <div className="flex flex-col items-center">
+      <Link href="/auctions" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+        <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Hərraclar</span>
           {inNavbar && segment === "auctions" && (
             <div className="h-1 w-[50%] rounded bg-red-600"></div>
           )}
         </div>
       </Link>
-      <Link href="/rules" className={`block py-2 hover:text-red-600`}>
-        <div className="flex flex-col items-center">
+      <Link href="/rules" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+        <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Qaydalar</span>
           {inNavbar && segment === "rules" && (
             <div className="h-1 w-[50%] rounded bg-red-600"></div>
           )}
         </div>
       </Link>
-      <Link href="/contact" className={`block py-2 hover:text-red-600`}>
-        <div className="flex flex-col items-center">
+      <Link href="/contact" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+        <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Əlaqə</span>
           {inNavbar && segment === "contact" && (
             <div className="h-1 w-[50%] rounded bg-red-600"></div>
@@ -132,15 +132,15 @@ export default function Navbar() {
   return (
     <>
       <header className="flex items-center justify-between border-b p-4">
-        <Link href="/" className="ml-8 text-2xl font-bold text-red-600">
+        <Link href="/" className="md:ml-8 text-2xl font-bold text-red-600">
           <Image src={"/Logo.png"} alt="logo" width={140} height={45} />
         </Link>
         <nav className="hidden space-x-4 md:flex">
           <NavLinks inNavbar />
         </nav>
-        <div className="flex items-center space-x-2">
-          <Link href={"/auctions/create"}>
-            <Button variant="ghost" size="sm">
+        <div className="hidden md:flex items-center space-x-2">
+          <Link className="border border-black rounded-lg text-primaryApp font-semibold" href={"/auctions/create"}>
+            <Button className="font-semibold" variant="ghost" size="sm">
               Elan et
             </Button>
           </Link>
@@ -151,7 +151,7 @@ export default function Navbar() {
               </SignedIn>
               <SignedOut>
                 <SignInButton>
-                  <Button variant="destructive" size="sm">
+                  <Button className="cursor-pointer" variant="destructive" size="sm">
                     Daxil ol
                   </Button>
                 </SignInButton>
@@ -170,13 +170,16 @@ export default function Navbar() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-full md:hidden">
+          <SheetContent className="w-full md:hidden bg-gray-100">
             <div className="flex h-full flex-col">
+              <div className="mb-8">
+                <Image className="mx-auto" src={"/Logo.png"} alt="logo" width={140} height={45} />
+              </div>
               <nav className="flex flex-col space-y-4">
                 <NavLinks />
               </nav>
               <div className="mt-auto space-y-4">
-                <Button className="w-full" variant="ghost">
+                <Button className="border mr-6 border-black rounded-lg text-primaryApp font-semibold" variant="ghost">
                   Elan et
                 </Button>
                 <ClerkLoaded>

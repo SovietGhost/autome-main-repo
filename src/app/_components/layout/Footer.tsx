@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#04011B] py-8 text-white">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:gap-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <Link href="/" className="text-2xl font-bold text-red-600">
               <Image src={"/Logo.png"} alt="logo" width={140} height={45} /> 
@@ -28,7 +28,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="md:place-self-center">
             <h3 className="mb-4 text-lg font-semibold">Vacib linklər</h3>
             <ul className="space-y-2">
               <li>
@@ -98,8 +98,8 @@ export default function Footer() {
 
           <div>
             <h3 className="mb-4 text-lg font-semibold">Əlaqə</h3>
-            <p className="text-gray-400">Phone: +994 50 123 45 67</p>
-            <p className="text-gray-400">Email: info@autome.az</p>
+            <p className="text-gray-400">Phone: +994997429000</p>
+            <p className="text-gray-400">Email: huseynzeynalli.info@gmail.com</p>
           </div>
         </div>
 
