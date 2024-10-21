@@ -1,8 +1,8 @@
+import { CircleX } from 'lucide-react';
 import React, { useState } from 'react'
 import { brakeSystem, categories, colors, fuelType, transmissionType } from '~/app/consts/details';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
 import { api } from '~/trpc/react';
-import { IoCloseSharp } from "react-icons/io5";
 
 function FilterAccordion({ open, onClose }: { open: any, onClose: () => any }) {
   const [manufacturer, setManufacturer] = useState("");
@@ -15,7 +15,7 @@ function FilterAccordion({ open, onClose }: { open: any, onClose: () => any }) {
       {
         open && <div className='px-4 py-3 flex justify-between'>
           <p>Filtr</p>
-          <IoCloseSharp onClick={onClose} />
+          <CircleX onClick={onClose} />
         </div>
       }
       <Accordion type="single" collapsible>
