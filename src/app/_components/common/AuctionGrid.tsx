@@ -12,6 +12,10 @@ import AuctionCard from "./AuctionCard";
 import { api } from "~/trpc/react";
 import CarAuctionGridSkeleton from "./AuctionSkeleton";
 import { Button } from "~/components/ui/button";
+import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md"
+import { CgSortAz } from 'react-icons/cg'
+import FilterAccordion from "./FilterAccordion";
+import { useState } from "react";
 
 export default function AuctionGrid({
   initialData,
@@ -45,19 +49,50 @@ export default function AuctionGrid({
       },
     );
 
-  console.log(data)
+  const [isOpen, setisOpen] = useState(false)
+
+  const handleOpen = function () {
+    setisOpen(!isOpen)
+  }
+
+  const handleClose = function () {
+    setisOpen(false)
+  }
 
   return (
     <>
-      <Button onClick={() => fetchPreviousPage()}>Prev</Button>
-      <Button onClick={() => fetchNextPage()}>Next</Button>
       {isLoading && <CarAuctionGridSkeleton />}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {data?.pages.map((page) =>
-          page.items.map((auction, i) => (
-            <AuctionCard key={i} auction={auction} />
-          )),
-        )}
+      <div className='flex flex-wrap gap-8 relative'>
+        <div className={`${isOpen ? "block md:hidden absolute -top-56" : "hidden md:block"} w-full md:w-[calc(30%-2rem)] bg-white rounded`}>
+          <FilterAccordion onClose={handleClose} open={isOpen} />
+        </div>
+        <div className='w-full md:w-[calc(70%)]'>
+          <div className='py-9 px-6 bg-white rounded-lg flex justify-between items-center'>
+            <span className='text-secondaryApp'>{data?.pages?.length} Hərrac </span>
+            <div className='border border-[#0500FF40] p-1 rounded-sm block md:hidden'>
+              <CgSortAz onClick={handleOpen} className='text-3xl' />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {data?.pages.map((page) =>
+              page.items.map((auction, i) => (
+                <AuctionCard key={i} auction={auction} />
+              )),
+            )}
+          </div>
+          <div className="flex justify-center gap-4 mt-[50px] items-center">
+            <button onClick={() => fetchPreviousPage()} className="border border-[#C1BFC8] p-2 rounded-lg">
+              <MdOutlineKeyboardDoubleArrowLeft />
+            </button>
+            <ul className="flex gap-4">
+              <li className="border border-black text-sm px-3 py-[6px] rounded-lg">1</li>
+              <li className="border border-[#C1BFC8] text-sm px-3 py-[6px] rounded-lg">2</li>
+            </ul>
+            <button onClick={() => fetchNextPage()} className="border border-[#C1BFC8] p-2 rounded-lg">
+              <MdOutlineKeyboardDoubleArrowRight />
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

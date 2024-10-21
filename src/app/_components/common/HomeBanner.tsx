@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function HomeBanner() {
   return (
-    <div className="flex h-[50vh] w-full items-center bg-[url(/HomeBanner.png)] bg-cover bg-center bg-no-repeat lg:min-h-[90vh]">
+    <div className="flex h-[80vh] w-full items-center bg-[url(/HomeBanner.png)] bg-cover bg-center bg-no-repeat lg:min-h-[90vh]">
       <div className="h-full w-full pt-32 text-white lg:flex lg:items-center lg:justify-between lg:gap-24 lg:pt-0">
         <div className="w-full rounded-2xl px-5 lg:w-[55%] lg:py-10 lg:pl-20">
           <div className="w-full">
@@ -18,7 +18,7 @@ export default function HomeBanner() {
             <div className="mt-10 flex flex-col gap-8 md:mb-10 md:mt-[70px] md:flex-row md:gap-12 lg:mb-0">
               <Link
                 href="/auctions"
-                className="flex w-full items-center justify-center rounded-xl bg-red-600 px-10 py-4 text-center text-sm duration-300 hover:bg-[#D00B0B] md:w-fit"
+                className="flex w-full items-center justify-center rounded-xl bg-primaryApp font-semibold px-10 py-4 text-center text-sm duration-300 hover:bg-[#D00B0B] md:w-fit"
               >
                 Hərraclara get
               </Link>

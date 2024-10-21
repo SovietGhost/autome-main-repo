@@ -46,16 +46,11 @@ export default function Page() {
                           şəhəri, Ü.Hacıbəyli 80
                         </p>
                         <p>
-                          <span className="font-medium">Tel:</span> (+994) 99
-                          315 54 75
-                        </p>
-                        <p>
-                          <span className="font-medium">Faks:</span> (+994) 99
-                          456 06 16
+                          <span className="font-medium">Tel:</span> (+994) 997429000
                         </p>
                         <p>
                           <span className="font-medium">E-mail:</span>{" "}
-                          infoautome@gmail.com
+                          huseynzeynalli.info@gmail.com
                         </p>
                       </div>
                     </div>

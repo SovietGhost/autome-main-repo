@@ -51,7 +51,7 @@ export default function EmailForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-6">
+    <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-6 py-10">
       <div>
         <Label htmlFor="fullName">Tam ad</Label>
         <Input

@@ -48,7 +48,7 @@ export default function VehicleSearchForm() {
     >
       <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <Label htmlFor="manufacturer">Manufacturer</Label>
+          <Label htmlFor="manufacturer">İstehsalçı</Label>
           <Select value={manufacturer} onValueChange={setManufacturer}>
             <SelectTrigger id="manufacturer">
               <SelectValue placeholder="Select manufacturer" />
@@ -130,10 +130,10 @@ export default function VehicleSearchForm() {
       </div>
       <div className="flex space-x-2">
         <Button type="button" variant="outline" onClick={handleReset}>
-          Reset
+          Sıfırla
         </Button>
         <Button type="submit" variant="default">
-          Search
+          Axtar
         </Button>
       </div>
     </form>

@@ -1,7 +1,36 @@
+import { env } from "~/env"
+
 import Banner from "~/app/_components/common/Banner";
 import CreateAuctionForm from "./_components/CreateAuctionForm";
 
-export default function Page() {
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
+const s3 = new S3Client({
+  region: env.AWS_REGION,
+  endpoint: env.AWS_URL,
+  credentials: {
+    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+const command = (Key: string) => new PutObjectCommand({
+  Bucket: env.AWS_BUCKET_NAME,
+  Key,
+});
+
+export default async function Page() {
+
+  const [firstImageURL, secondImageURL, thirdImageURL, fourthImageURL, fifthImageURL, sixthImageURL] = await Promise.all([
+    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
+    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
+    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
+    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
+    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
+    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
+  ]);
+
   return (
     <>
       <Banner />
@@ -17,7 +46,14 @@ export default function Page() {
             əlinin altında buyur başla.
           </p>
         </div>
-        <CreateAuctionForm />
+        <CreateAuctionForm
+          firstImageURL={firstImageURL}
+          secondImageURL={secondImageURL}
+          thirdImageURL={thirdImageURL}
+          fourthImageURL={fourthImageURL}
+          fifthImageURL={fifthImageURL}
+          sixthImageURL={sixthImageURL}
+         />
       </main>
     </>
   );
