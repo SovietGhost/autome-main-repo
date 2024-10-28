@@ -1,6 +1,8 @@
 import Banner from "~/app/_components/common/Banner";
 import VinForm from "./_components/VinForm";
 
+export const dynamic = "force-static";
+
 export default function Page() {
   return (
     <main>
