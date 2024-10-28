@@ -19,19 +19,18 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: z.string(),
     AWS_REGION: z.string(),
     AWS_BUCKET_NAME: z.string(),
-    AWS_URL: z.string().url(),
   },
-  
+
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
-  */
- client: {
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
-   NEXT_PUBLIC_PUSHER_CLUSTER: z.string(),
-   NEXT_PUBLIC_PUSHER_KEY: z.string(),
-   NEXT_PUBLIC_FILES_URL: z.string()
+   */
+  client: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_PUSHER_CLUSTER: z.string(),
+    NEXT_PUBLIC_PUSHER_KEY: z.string(),
+    NEXT_PUBLIC_CLOUDFRONT_URL: z.string().url(),
   },
 
   /**
@@ -53,8 +52,7 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     AWS_REGION: process.env.AWS_REGION,
     AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
-    AWS_URL: process.env.AWS_URL,
-    NEXT_PUBLIC_FILES_URL: process.env.NEXT_PUBLIC_FILES_URL
+    NEXT_PUBLIC_CLOUDFRONT_URL: process.env.NEXT_PUBLIC_CLOUDFRONT_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -35,6 +35,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  console.log(auction)
+
   return (
     <>
       <Banner />
@@ -49,7 +51,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <CarouselContent>
             {auction.image_urls.map((image, key) => (
               <CarouselItem key={key}>
-                <img src={image} alt={`image-${id}-${image}`} />
+                <img src={"https://d2zfgqlf32q3r1.cloudfront.net/" + image} alt={`image-${id}-${image}`} />
               </CarouselItem>
             ))}
           </CarouselContent>

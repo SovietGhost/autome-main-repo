@@ -1,4 +1,4 @@
-import { env } from "~/env"
+import { env } from "~/env";
 
 import Banner from "~/app/_components/common/Banner";
 import CreateAuctionForm from "./_components/CreateAuctionForm";
@@ -8,28 +8,39 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3 = new S3Client({
   region: env.AWS_REGION,
-  endpoint: env.AWS_URL,
+
   credentials: {
     accessKeyId: env.AWS_ACCESS_KEY_ID,
     secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
-const command = (Key: string) => new PutObjectCommand({
-  Bucket: env.AWS_BUCKET_NAME,
-  Key,
-});
+const command = (Key: string) =>
+  new PutObjectCommand({
+    Bucket: env.AWS_BUCKET_NAME,
+    Key,
+  });
 
 export default async function Page() {
+  const uuids = [
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+  ] as const;
 
-  const [firstImageURL, secondImageURL, thirdImageURL, fourthImageURL, fifthImageURL, sixthImageURL] = await Promise.all([
-    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
-    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
-    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
-    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
-    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
-    getSignedUrl(s3, command(crypto.randomUUID()), {expiresIn: 3600}),
-  ]);
+  const [
+    firstImageURL,
+    secondImageURL,
+    thirdImageURL,
+    fourthImageURL,
+    fifthImageURL,
+    sixthImageURL,
+  ]: [string, string, string, string, string, string] = (await Promise.all(
+    uuids.map((uuid) => getSignedUrl(s3, command(uuid), { expiresIn: 3600 })),
+  )) as [string, string, string, string, string, string];
 
   return (
     <>
@@ -41,19 +52,36 @@ export default async function Page() {
             Online hərracla fürsətlərdən yararlan və vaxtına qənaət et!{" "}
           </h1>
           <p className="mt-1 text-sm text-[#05012380] md:text-base">
-            {" "}
             İştirak et, al-sat, fürsətlərdən yararlan. Hərraclar bir məkanda
             əlinin altında buyur başla.
           </p>
         </div>
         <CreateAuctionForm
-          firstImageURL={firstImageURL}
-          secondImageURL={secondImageURL}
-          thirdImageURL={thirdImageURL}
-          fourthImageURL={fourthImageURL}
-          fifthImageURL={fifthImageURL}
-          sixthImageURL={sixthImageURL}
-         />
+          firstImageURL={{
+            url: firstImageURL,
+            uuid: uuids[0],
+          }}
+          secondImageURL={{
+            url: secondImageURL,
+            uuid: uuids[1],
+          }}
+          thirdImageURL={{
+            url: thirdImageURL,
+            uuid: uuids[2],
+          }}
+          fourthImageURL={{
+            url: fourthImageURL,
+            uuid: uuids[3],
+          }}
+          fifthImageURL={{
+            url: fifthImageURL,
+            uuid: uuids[4],
+          }}
+          sixthImageURL={{
+            url: sixthImageURL,
+            uuid: uuids[5],
+          }}
+        />
       </main>
     </>
   );

@@ -12,6 +12,7 @@ import { Heart, Share2 } from "lucide-react";
 import { Auction } from "@prisma/client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { env } from "~/env";
 
 const CountdownTimer = dynamic(() => import("./Countdown"), { ssr: false });
 
@@ -59,7 +60,7 @@ export default function AuctionCard({
     <Card className="w-full overflow-hidden rounded-lg border border-gray-200">
       <CardHeader className="relative p-0">
         <img
-          src={auction.image_urls[0]}
+          src={env.NEXT_PUBLIC_CLOUDFRONT_URL + auction.image_urls[0]}
           alt="Red sports car in a parking garage"
           className="h-[200px] w-full object-cover"
         />

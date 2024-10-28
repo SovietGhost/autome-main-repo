@@ -1,9 +1,7 @@
 "use client";
-import { env } from "~/env"
-import { useFormState } from "react-dom";
-import { createAuction } from "~/app/actions/create_auction";
+
 import BrandSelect from "./BrandSelect";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ModelSelect from "./ModelSelect";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -16,6 +14,7 @@ import LeadingSelect from "./LeadingSelect";
 import TrailingSelect from "./TrailingSelect";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "sonner";
+import { api } from "~/trpc/react";
 
 export default function CreateAuctionForm({
   firstImageURL,
@@ -25,14 +24,21 @@ export default function CreateAuctionForm({
   fifthImageURL,
   sixthImageURL,
 }: {
-  firstImageURL: string;
-  secondImageURL: string;
-  thirdImageURL: string;
-  fourthImageURL: string;
-  fifthImageURL: string;
-  sixthImageURL: string;
+  firstImageURL: { url: string; uuid: string };
+  secondImageURL: { url: string; uuid: string };
+  thirdImageURL: { url: string; uuid: string };
+  fourthImageURL: { url: string; uuid: string };
+  fifthImageURL: { url: string; uuid: string };
+  sixthImageURL: { url: string; uuid: string };
 }) {
-  const [state, action] = useFormState(createAuction, undefined);
+  const mutation = api.auction.createAuction.useMutation({
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: () => {
+      toast.success("Auction created successfully");
+    },
+  });
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -62,48 +68,38 @@ export default function CreateAuctionForm({
   const [sideImage, setSideImage] = useState<string>("");
   const [otherImage, setOtherImage] = useState<string>("");
 
-  useEffect(() => {
-    if (state?.error) {
-      toast(state.error.message);
-    }
-  }, [state]);
-
   return (
     <form
       action={async () => {
         console.log(startDate, endDate);
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("brand", make);
-        formData.append("model", model);
-        formData.append("carYear", year);
-        formData.append("engine", engine);
-        formData.append("engineVol", engineVol);
-        formData.append("fuelType", fuel);
-        formData.append("location", location);
-        formData.append("brakeSystem", brakeSystem);
-        formData.append("startPrice", startPrice);
-        formData.append("startDate", startDate);
-        formData.append("endDate", endDate);
-        formData.append("segment", segment);
-        formData.append("leading", leading);
-        formData.append("trailing", trailing);
-        formData.append("color", color);
-        formData.append("km", km);
-        formData.append("vin", vin);
-        formData.append("description", description);
-        insurancePaper && formData.append("insurancePaper", insurancePaper);
-        techinalInspectionPaper &&
-          formData.append("techinalInspectionPaper", techinalInspectionPaper);
-        // images.forEach((image) => formData.append("images", image, image.name));
-        frontImage && formData.append("frontImage", frontImage);
-        backImage && formData.append("backImage", backImage);
-        sideImage && formData.append("sideImage", sideImage);
-        otherImage && formData.append("otherImage", otherImage);
-
-        console.log(formData);
-
-        await action(formData);
+        mutation.mutate({
+          backImageUrl: backImage,
+          brakeSystem,
+          brand: make,
+          carYear: year,
+          category: "car",
+          color,
+          segment,
+          description,
+          endDate,
+          engine,
+          engineVol,
+          frontImageUrl: frontImage,
+          fuelType: fuel,
+          insurancePaperUrl: insurancePaper,
+          km,
+          leading,
+          location,
+          model,
+          name,
+          sideImageUrl: sideImage,
+          startPrice,
+          startDate,
+          techinalInspectionPaperUrl: techinalInspectionPaper,
+          trailing,
+          vin,
+          otherImageUrl: otherImage,
+        });
       }}
       className="container mx-auto grid grid-cols-1 gap-4 px-4 pt-6 md:grid-cols-2"
     >
@@ -231,18 +227,18 @@ export default function CreateAuctionForm({
           type="file"
           onChange={async (e) => {
             const file = e.target.files?.[0];
-            const upload = await fetch(firstImageURL, {
-              method: 'PUT',
+            const upload = await fetch(firstImageURL.url, {
+              method: "PUT",
               body: file,
-              headers: { 'Content-Type': file?.type ?? '' },
+              headers: { "Content-Type": file?.type ?? "" },
             });
 
             if (upload.ok) {
-              console.log('Uploaded successfully!');
+              console.log("Uploaded successfully!");
               console.log(await upload.text());
-              setInsurancePaper(env.NEXT_PUBLIC_FILES_URL + file?.name);
+              setInsurancePaper(firstImageURL.uuid + "");
             } else {
-              console.error('Upload failed.');
+              console.error("Upload failed.");
             }
           }}
         />
@@ -255,23 +251,20 @@ export default function CreateAuctionForm({
           type="file"
           onChange={async (e) => {
             const file = e.target.files?.[0];
-            const upload = await fetch(secondImageURL, {
-              method: 'PUT',
+            const upload = await fetch(secondImageURL.url, {
+              method: "PUT",
               body: file,
-              headers: { 'Content-Type': file?.type ?? '' },
+              headers: { "Content-Type": file?.type ?? "" },
             });
 
-
             if (upload.ok) {
-              console.log('Uploaded successfully!');
+              console.log("Uploaded successfully!");
               console.log(await upload.text());
-              setTechinalInspectionPaper(env.NEXT_PUBLIC_FILES_URL + file?.name);
+              setTechinalInspectionPaper(secondImageURL.uuid + "");
             } else {
-              console.error('Upload failed.');
+              console.error("Upload failed.");
             }
-          }
-
-          }
+          }}
         />
       </div>
 
@@ -283,18 +276,18 @@ export default function CreateAuctionForm({
           type="file"
           onChange={async (e) => {
             const file = e.target.files?.[0];
-            const upload = await fetch(thirdImageURL, {
-              method: 'PUT',
+            const upload = await fetch(thirdImageURL.url, {
+              method: "PUT",
               body: file,
-              headers: { 'Content-Type': file?.type ?? '' },
+              headers: { "Content-Type": file?.type ?? "" },
             });
 
             if (upload.ok) {
-              console.log('Uploaded successfully!');
+              console.log("Uploaded successfully!");
               console.log(await upload.text());
-              setFrontImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+              setFrontImage(thirdImageURL.uuid + "");
             } else {
-              console.error('Upload failed.');
+              console.error("Upload failed.");
             }
           }}
         />
@@ -307,18 +300,18 @@ export default function CreateAuctionForm({
           type="file"
           onChange={async (e) => {
             const file = e.target.files?.[0];
-            const upload = await fetch(fourthImageURL, {
-              method: 'PUT',
+            const upload = await fetch(fourthImageURL.url, {
+              method: "PUT",
               body: file,
-              headers: { 'Content-Type': file?.type ?? '' },
+              headers: { "Content-Type": file?.type ?? "" },
             });
 
             if (upload.ok) {
-              console.log('Uploaded successfully!');
+              console.log("Uploaded successfully!");
               console.log(await upload.text());
-              setBackImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+              setBackImage(fourthImageURL.uuid + "");
             } else {
-              console.error('Upload failed.');
+              console.error("Upload failed.");
             }
           }}
         />
@@ -331,18 +324,18 @@ export default function CreateAuctionForm({
           type="file"
           onChange={async (e) => {
             const file = e.target.files?.[0];
-            const upload = await fetch(fifthImageURL, {
-              method: 'PUT',
+            const upload = await fetch(fifthImageURL.url, {
+              method: "PUT",
               body: file,
-              headers: { 'Content-Type': file?.type ?? '' },
+              headers: { "Content-Type": file?.type ?? "" },
             });
 
             if (upload.ok) {
-              console.log('Uploaded successfully!');
+              console.log("Uploaded successfully!");
               console.log(await upload.text());
-              setSideImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+              setSideImage(fifthImageURL.uuid + "");
             } else {
-              console.error('Upload failed.');
+              console.error("Upload failed.");
             }
           }}
         />
@@ -354,18 +347,18 @@ export default function CreateAuctionForm({
           type="file"
           onChange={async (e) => {
             const file = e.target.files?.[0];
-            const upload = await fetch(sixthImageURL, {
-              method: 'PUT',
+            const upload = await fetch(sixthImageURL.url, {
+              method: "PUT",
               body: file,
-              headers: { 'Content-Type': file?.type ?? '' },
+              headers: { "Content-Type": file?.type ?? "" },
             });
 
             if (upload.ok) {
-              console.log('Uploaded successfully!');
+              console.log("Uploaded successfully!");
               console.log(await upload.text());
-              setOtherImage(env.NEXT_PUBLIC_FILES_URL + file?.name);
+              setOtherImage(sixthImageURL.uuid + "");
             } else {
-              console.error('Upload failed.');
+              console.error("Upload failed.");
             }
           }}
         />

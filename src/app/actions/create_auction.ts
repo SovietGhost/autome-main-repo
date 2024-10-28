@@ -29,12 +29,12 @@ const createAuctionSchema = z
     carYear: z.string().transform(Number),
     engineVol: z.string().transform(Number),
     km: z.string().transform(BigInt),
-    insurancePaper: z.custom<File>((file) => file instanceof File),
-    techinalInspectionPaper: z.custom<File>((file) => file instanceof File),
-    frontImage: z.custom<File>((file) => file instanceof File),
-    backImage: z.custom<File>((file) => file instanceof File),
-    sideImage: z.custom<File>((file) => file instanceof File),
-    otherImage: z.custom<File>((file) => file instanceof File).optional(),
+    insurancePaperUrl: z.string(),
+    techinalInspectionPaperUrl: z.string(),
+    frontImageUrl: z.string(),
+    backImageUrl: z.string(),
+    sideImageUrl: z.string(),
+    otherImageUrl: z.string().optional(),
   })
   .refine((input) => {
     console.log(
@@ -97,26 +97,15 @@ export async function createAuction(
     carYear,
     engineVol,
     km,
-    insurancePaper,
-    techinalInspectionPaper,
-    backImage,
-    frontImage,
-    sideImage,
-    otherImage,
+    insurancePaperUrl,
+    techinalInspectionPaperUrl,
+    backImageUrl,
+    frontImageUrl,
+    sideImageUrl,
+    otherImageUrl,
   } = input.data;
 
-  const images = [backImage, frontImage, sideImage, otherImage].filter(
-    (i) => !!i,
-  );
-
   try {
-    const [insurancePaperUrl, techinalInspectionPaperUrl, ...imageUrls] =
-      await Promise.all([
-        uploader.upload(insurancePaper),
-        uploader.upload(techinalInspectionPaper),
-        ...images.map((image) => uploader.upload(image)),
-      ]);
-
     const auctionResult = await db.auction.create({
       data: {
         owner_id: authState.userId,
@@ -124,7 +113,9 @@ export async function createAuction(
         description,
         start_price: startPrice,
         location,
-        image_urls: imageUrls,
+        image_urls: otherImageUrl
+          ? [frontImageUrl, backImageUrl, sideImageUrl, otherImageUrl]
+          : [frontImageUrl, backImageUrl, sideImageUrl],
         start_date: startDate,
         end_date: endDate,
         model,
