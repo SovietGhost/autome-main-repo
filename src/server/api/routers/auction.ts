@@ -23,9 +23,9 @@ export const auctionRouter = createTRPCRouter({
         take: limit + 1, // get an extra item at the end which we'll use as next cursor
         cursor: cursor ? { id: cursor } : undefined,
         where: {
-          // end_date: {
-          //   gte: new Date(),
-          // },
+          end_date: {
+            gte: new Date(),
+          },
           enabled: true,
         },
         include: {
@@ -56,9 +56,9 @@ export const auctionRouter = createTRPCRouter({
     const auction = await ctx.db.auction.findUniqueOrThrow({
       where: {
         id: input,
-        // end_date: {
-        //   gte: new Date(),
-        // },
+        end_date: {
+          gte: new Date(),
+        },
         enabled: true,
       },
       include: {
