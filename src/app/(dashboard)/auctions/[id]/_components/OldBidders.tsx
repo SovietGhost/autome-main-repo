@@ -32,7 +32,7 @@ export default function OldBidders({ id }: { id: number }) {
   }
 
   if (!bidders || bidders.length === 0) {
-    return <div className="mx-auto text-black">No bidders found</div>;
+    return <div className="mx-auto text-black">Təklif verən yoxdur</div>;
   }
 
   return (

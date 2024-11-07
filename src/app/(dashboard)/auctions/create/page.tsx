@@ -42,6 +42,17 @@ export default async function Page() {
     uuids.map((uuid) => getSignedUrl(s3, command(uuid), { expiresIn: 3600 })),
   )) as [string, string, string, string, string, string];
 
+  console.log({
+    uuids, urls: {
+      firstImageURL,
+      secondImageURL,
+      thirdImageURL,
+      fourthImageURL,
+      fifthImageURL,
+      sixthImageURL,
+    }
+  })
+
   return (
     <>
       <Banner />

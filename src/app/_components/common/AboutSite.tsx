@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function AboutSite() {
   return (
-    <div className="my-[40px] mb-20">
+    <div className="mt-[40px] mb-16 md:mb-32">
       <div className="mx-auto max-w-[1350px] px-4 sm:px-6 lg:px-8">
         <h1 className="mb-8 text-center text-2xl font-semibold md:mb-[50px] md:text-4xl">
           İşləmə qaydası

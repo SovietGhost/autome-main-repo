@@ -1,10 +1,8 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
-  CardContent,
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
@@ -14,7 +12,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { env } from "~/env";
 
-const CountdownTimer = dynamic(() => import("./Countdown"), { ssr: false });
+const CountdownTimer = dynamic(() => import("./CountdownCard"), { ssr: false });
 
 interface CountdownProps {
   days: number;
@@ -71,12 +69,12 @@ export default function AuctionCard({
           <Heart className="h-6 w-6" />
         </button>
       </CardHeader>
-      <CardFooter className="flex items-center justify-between bg-white p-4">
+      <CardFooter className="flex flex-col items-start bg-white p-4">
         <div>
           <h3 className="mb-1 text-lg font-semibold">{auction.name}</h3>
           <div>₼{auction.bids[0]?.amount ?? auction.start_price}</div>
         </div>
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 mt-2">
           <Link href={`/auctions/${auction.id}`}>
           <Button variant="destructive">Daxil ol →</Button>
           </Link>

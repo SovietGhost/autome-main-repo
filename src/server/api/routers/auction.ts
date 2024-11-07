@@ -168,6 +168,8 @@ export const auctionRouter = createTRPCRouter({
         sideImageUrl,
       } = input;
 
+      console.log(input)
+
       const auction = await ctx.db.auction.create({
         data: {
           brake_system: brakeSystem,

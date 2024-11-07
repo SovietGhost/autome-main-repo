@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { phone, mail } from "~/constants/contact"
 
 export default function Footer() {
   return (
@@ -98,8 +99,14 @@ export default function Footer() {
 
           <div>
             <h3 className="mb-4 text-lg font-semibold">Əlaqə</h3>
-            <p className="text-gray-400">Phone: +994997429000</p>
-            <p className="text-gray-400">Email: huseynzeynalli.info@gmail.com</p>
+            <p>
+              <a href={"tel:" + phone} className="text-gray-400">
+                Phone: {phone}
+              </a>
+            </p>
+            <p>
+              <a href={"mailto:" + mail} className="text-gray-400">Email: {mail}</a>
+            </p>
           </div>
         </div>
 

@@ -31,7 +31,7 @@ export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
   return (
     <Popover open={open}>
       <PopoverTrigger className="w-full" onClick={() => setOpen((r) => !r)}>
-        <div className="flex w-full items-center justify-center rounded-lg border bg-card bg-red-600 p-4 text-card-foreground text-white shadow-sm">
+        <div className="flex w-full items-center justify-center rounded-lg border bg-card bg-red-600 p-3 text-card-foreground text-white shadow-sm">
           Təklif et
         </div>
       </PopoverTrigger>

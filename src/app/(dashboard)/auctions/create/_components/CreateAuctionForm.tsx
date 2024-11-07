@@ -267,7 +267,6 @@ export default function CreateAuctionForm({
           }}
         />
       </div>
-
       <div>
         <Label htmlFor="front-images">Ön</Label>
         <Input

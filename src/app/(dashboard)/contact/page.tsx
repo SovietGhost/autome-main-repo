@@ -1,4 +1,5 @@
 import Banner from "~/app/_components/common/Banner";
+import { phone, mail } from "~/constants/contact"
 
 export const dynamic = "force-static";
 
@@ -47,13 +48,16 @@ export default function Page() {
                           <span className="font-medium">Ünvan:</span> Bakı
                           şəhəri, Ü.Hacıbəyli 80
                         </p>
-                        <p>
-                          <span className="font-medium">Tel:</span> (+994) 997429000
-                        </p>
-                        <p>
+                        <a>
+                          <span className="font-medium">Tel:</span>
+                          <a href={"tel:" + phone}>
+                            {phone}
+                          </a>
+                        </a>
+                        <a href={"mailto:" + mail}>
                           <span className="font-medium">E-mail:</span>{" "}
-                          huseynzeynalli.info@gmail.com
-                        </p>
+                          {mail}
+                        </a>
                       </div>
                     </div>
                   </div>

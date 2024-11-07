@@ -14,8 +14,6 @@ export default async function Page({
 
   const auctions = await api.auction.list({ cursor: page * 12, limit: 12 });
 
-  console.log(auctions)
-
   return (
     <>
       <Banner />
@@ -28,6 +26,7 @@ export default async function Page({
             Növbəti hərracı hara etməyi istədiyinizə qərar verin!
           </p>
           <AuctionGrid
+            isHome={false}
             initialData={auctions.items}
             cursor={auctions.nextCursor ?? 0}
           />

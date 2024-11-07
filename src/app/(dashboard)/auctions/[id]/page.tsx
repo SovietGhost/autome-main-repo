@@ -1,13 +1,19 @@
 import { notFound } from "next/navigation";
 import Banner from "~/app/_components/common/Banner";
 import { api } from "~/trpc/server";
+import AutoScroll from "embla-carousel-auto-scroll";
+
 
 import {
   Carousel,
-  CarouselContent,
-  CarouselItem,
+
+  CarouselMainContainer,
+
   CarouselNext,
   CarouselPrevious,
+  CarouselThumbsContainer,
+  SliderMainItem,
+  SliderThumbItem,
 } from "~/components/ui/carousel";
 import AuctionViewCountdown from "~/app/_components/common/AuctionViewCountdown";
 import CreateBidPopover from "./_components/CreateBidPopover";
@@ -35,28 +41,34 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  console.log(auction)
-
   return (
     <>
-      <Banner />
-      <main className="container mx-auto grid w-full grid-cols-1 px-4 py-8 md:grid-cols-2">
+      <main className="container mx-auto grid w-full grid-cols-1 px-4 py-8 gap-x-4 md:grid-cols-2">
         <Carousel
-          className="w-[320px]"
-          opts={{
+          className="md:mb-0 mb-[48px]"
+          carouselOptions={{
             loop: true,
-            align: "start",
+            
           }}
         >
-          <CarouselContent>
+          <CarouselMainContainer >
             {auction.image_urls.map((image, key) => (
-              <CarouselItem key={key}>
+              <SliderMainItem key={key}>
                 <img src={"https://d2zfgqlf32q3r1.cloudfront.net/" + image} alt={`image-${id}-${image}`} />
-              </CarouselItem>
+              </SliderMainItem>
             ))}
-          </CarouselContent>
-          <CarouselPrevious className="ml-16" />
-          <CarouselNext className="mr-16" />
+          </CarouselMainContainer>
+
+          <CarouselThumbsContainer>
+            {auction.image_urls.map((image, key) => (
+              <SliderThumbItem index={key} key={key}>
+                <img src={"https://d2zfgqlf32q3r1.cloudfront.net/" + image} alt={`image-${id}-${image}`} />
+              </SliderThumbItem>
+            ))}
+          </CarouselThumbsContainer>
+
+          <CarouselPrevious className="ml-[32px]" />
+          <CarouselNext className="mr-[32px]" />
         </Carousel>
 
         <div className="flex flex-col gap-4">
@@ -64,7 +76,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <p className="text-gray-500">{auction.description}</p>
           <AuctionViewCountdown auction={auction} />
           <div className="flex gap-2">
-            <div className="w-max rounded-lg border bg-card p-4 text-card-foreground shadow-sm">
+            <div className="w-max rounded-lg text-center flex items-center border bg-card p-2 text-card-foreground shadow-sm">
               ₼
               {auction.bids.length
                 ? auction.bids[0]?.amount

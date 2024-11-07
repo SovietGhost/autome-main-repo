@@ -1,4 +1,6 @@
-import { Auction } from "@prisma/client";
+import { Card } from "~/components/ui/card"
+import type { Auction } from "@prisma/client"
+
 export default function AuctionMetadata({ auction }: { auction: Auction }) {
   const {
     name,
@@ -11,7 +13,6 @@ export default function AuctionMetadata({ auction }: { auction: Auction }) {
     end_date,
     start_date,
     start_price,
-    segment,
     engine,
     engine_vol,
     fuel_type,
@@ -21,104 +22,110 @@ export default function AuctionMetadata({ auction }: { auction: Auction }) {
     model,
     vin,
     location,
-  } = auction;
+  } = auction
+
   return (
-    <>
-      <div className="flex flex-col gap-4 shadow-sm rounded border p-4">
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-1">
-            <span className="text-lg font-bold">General Information</span>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div>
-                <span className="font-bold">Name:</span>
-                <span>{name}</span>
-              </div>
-              <div>
-                <span className="font-bold">Category:</span>
-                <span>{category}</span>
-              </div>
-              <div>
-                <span className="font-bold">Brand:</span>
-                <span>{brand}</span>
-              </div>
-              <div>
-                <span className="font-bold">Model:</span>
-                <span>{model}</span>
-              </div>
-              <div>
-                <span className="font-bold">Year:</span>
-                <span>{car_year}</span>
-              </div>
-              <div>
-                <span className="font-bold">Color:</span>
-                <span>{color}</span>
-              </div>
-              <div>
-                <span className="font-bold">VIN:</span>
-                <span>{vin}</span>
-              </div>
-              <div>
-                <span className="font-bold">Location:</span>
-                <span>{location}</span>
-              </div>
-            </div>
+    <Card className="p-6 space-y-6">
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Avtomobil məlumatı</h2>
+        <div className="grid grid-cols-2 gap-y-2">
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">İstehsalçı:</span>
           </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-lg font-bold">Technical Information</span>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <span className="font-bold">Engine:</span>
-                <span>{engine}</span>
-              </div>
-              <div>
-                <span className="font-bold">Engine Volume:</span>
-                <span>{engine_vol}</span>
-              </div>
-              <div>
-                <span className="font-bold">Fuel Type:</span>
-                <span>{fuel_type}</span>
-              </div>
-              <div>
-                <span className="font-bold">Kilometers:</span>
-                <span>{km}</span>
-              </div>
-              <div>
-                <span className="font-bold">Brake System:</span>
-                <span>{brake_system}</span>
-              </div>
-              <div>
-                <span className="font-bold text-red-500">Leading:</span>
-                <span>{leading}</span>
-              </div>
-              <div>
-                <span className="font-bold text-red-500">Trailing:</span>
-                <span>{trailing}</span>
-              </div>
-            </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{brand}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">Model:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{model}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">Kateqoriya:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{category}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">İl:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{car_year}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">Mühərrikin Həcmi:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{engine_vol}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">Yanacaq növü:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{fuel_type}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">Rəng:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{color}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">Kilometr:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{km}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">VİN kod:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{vin}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">At gücü:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{engine}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">Şəhər:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{location}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">Ötürücü növü:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{brake_system}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">Aparıcı tərəf:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{leading}</span>
+          </div>
+          <div className="px-4 py-2">
+            <span className="font-semibold">Sükan yeri:</span>
+          </div>
+          <div className="px-4 py-2">
+            <span>{trailing}</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span className="font-semibold">Hərracın başlama tarixi:</span>
+          </div>
+          <div className="bg-muted px-4 py-2">
+            <span>{start_date.toLocaleString()}</span>
           </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-lg font-bold">Description</span>
-          <span>{description}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-lg font-bold col-span-full">Auction Information</span>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div>
-              <span className="font-bold">Start Date:</span>
-              <span>{start_date.toLocaleString()}</span>
-            </div>
-            <div>
-              <span className="font-bold">End Date:</span>
-              <span>{end_date.toLocaleString()}</span>
-            </div>
-            <div>
-              <span className="font-bold">Start Price:</span>
-              <span>{start_price}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Təfərrüatlar</h2>
+        <p className="text-muted-foreground">{description}</p>
+      </section>
+    </Card>
+  )
 }
