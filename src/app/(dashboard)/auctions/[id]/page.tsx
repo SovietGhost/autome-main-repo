@@ -20,6 +20,7 @@ import CreateBidPopover from "./_components/CreateBidPopover";
 import OldBidders from "./_components/OldBidders";
 import AuctionMetadata from "./_components/Metadata";
 import { Auction } from "@prisma/client";
+import { env } from "~/env";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id, 10);
@@ -54,7 +55,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <CarouselMainContainer >
             {auction.image_urls.map((image, key) => (
               <SliderMainItem key={key}>
-                <img src={"https://d2zfgqlf32q3r1.cloudfront.net/" + image} alt={`image-${id}-${image}`} />
+                <img src={env.NEXT_PUBLIC_CLOUDFRONT_URL + image} alt={`image-${id}-${image}`} />
               </SliderMainItem>
             ))}
           </CarouselMainContainer>
@@ -62,7 +63,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <CarouselThumbsContainer>
             {auction.image_urls.map((image, key) => (
               <SliderThumbItem index={key} key={key}>
-                <img src={"https://d2zfgqlf32q3r1.cloudfront.net/" + image} alt={`image-${id}-${image}`} />
+                <img src={env.NEXT_PUBLIC_CLOUDFRONT_URL + image} alt={`image-${id}-${image}`} />
               </SliderThumbItem>
             ))}
           </CarouselThumbsContainer>
