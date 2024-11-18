@@ -198,7 +198,7 @@ export const auctionRouter = createTRPCRouter({
             ? [frontImageUrl, backImageUrl, sideImageUrl, otherImageUrl]
             : [frontImageUrl, backImageUrl, sideImageUrl],
           owner_id: ctx.auth.userId,
-          enabled: true,
+          enabled: false,
         },
       });
 
