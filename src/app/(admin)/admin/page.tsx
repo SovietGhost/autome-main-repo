@@ -1,6 +1,6 @@
 import { db } from "~/server/db";
 import { Prisma } from "@prisma/client";
-import EnableAuctionButton from "./components/EnableAuctionButton";
+import ToggleAuctionButton from "./components/ToggleAuctionButton";
 
 export default async function Page() {
   const auctions = await db.auction.findMany();
@@ -29,7 +29,7 @@ export default async function Page() {
               <td>{auction.start_price}</td>
               <td>{auction.enabled ? "Yes" : "No"}</td>
               <td>
-                <EnableAuctionButton id={auction.id} />
+                <ToggleAuctionButton id={auction.id} status={!auction.enabled} />
               </td>
             </tr>
           ))}
