@@ -75,7 +75,7 @@ export default function AuctionMetadata({ auction }: { auction: Auction }) {
             <span className="font-semibold">Kilometr:</span>
           </div>
           <div className="px-4 py-2">
-            <span>{km}</span>
+            <span>{km.toString()}</span>
           </div>
           <div className="bg-muted px-4 py-2">
             <span className="font-semibold">VİN kod:</span>
