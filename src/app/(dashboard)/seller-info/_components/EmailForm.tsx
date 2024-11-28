@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -16,13 +15,12 @@ import {
 } from "~/components/ui/select";
 
 import { api } from "~/trpc/react";
+import { User } from "better-auth";
 
-export default function EmailForm() {
+export default function EmailForm({ user }: { user: User }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-
-  const user = useUser();
 
   const mutation = api.email.send.useMutation();
 
@@ -70,18 +68,10 @@ export default function EmailForm() {
             <SelectValue placeholder="Email" />
           </SelectTrigger>
           <SelectContent>
-            {user.user &&
-              user.user.emailAddresses.map((emailAddress) => (
-                <SelectItem
-                  key={emailAddress.id}
-                  value={emailAddress.emailAddress}
-                >
-                  {emailAddress.emailAddress}
-                </SelectItem>
-              ))}
-              <SelectItem value="automeauc@gmail.com">
-                automeauc@gmail.com
-              </SelectItem>
+            {user && <SelectItem value={user.email}>{user.email}</SelectItem>}
+            <SelectItem value="automeauc@gmail.com">
+              automeauc@gmail.com
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

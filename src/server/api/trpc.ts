@@ -6,12 +6,12 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import type { auth } from "@clerk/nextjs/server";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
+import { auth, getServerSideAuth } from "~/server/auth";
 
 /**
  * 1. CONTEXT
@@ -25,12 +25,11 @@ import { db } from "~/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: {
-  headers: Headers;
-  auth: ReturnType<typeof auth>;
-}) => {
+export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const session = await getServerSideAuth(opts.headers);
   return {
     db,
+    session,
     ...opts,
   };
 };
@@ -107,15 +106,14 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * procedure. If the user is not authenticated, an error is thrown.
  */
 export const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
-  if (!ctx.auth.userId) {
+  if (!ctx.session) {
     throw new Error("User is not authenticated");
   }
 
   return next({
     ctx: {
       auth: {
-        ...ctx.auth,
-        userId: ctx.auth.userId,
+        ...ctx.session,
       },
     },
   });

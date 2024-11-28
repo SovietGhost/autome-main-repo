@@ -19,22 +19,18 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  ClerkLoading,
-  ClerkLoaded,
-} from "@clerk/nextjs";
-import { Skeleton } from "~/components/ui/skeleton";
+import type { User } from "better-auth";
+import { useRouter } from "next/navigation";
 
 const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
   const segment = useSelectedLayoutSegment();
 
   return (
     <>
-      <Link href="/about" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+      <Link
+        href="/about"
+        className={`${!inNavbar && "rounded-lg bg-white px-2"} block py-2 hover:text-red-600`}
+      >
         <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Haqqında</span>
           {inNavbar && segment === "about" && (
@@ -42,7 +38,10 @@ const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
           )}
         </div>
       </Link>
-      <Link href="/auctions" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+      <Link
+        href="/auctions"
+        className={`${!inNavbar && "rounded-lg bg-white px-2"} block py-2 hover:text-red-600`}
+      >
         <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Hərraclar</span>
           {inNavbar && segment === "auctions" && (
@@ -50,7 +49,10 @@ const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
           )}
         </div>
       </Link>
-      <Link href="/rules" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+      <Link
+        href="/rules"
+        className={`${!inNavbar && "rounded-lg bg-white px-2"} block py-2 hover:text-red-600`}
+      >
         <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Qaydalar</span>
           {inNavbar && segment === "rules" && (
@@ -58,7 +60,10 @@ const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
           )}
         </div>
       </Link>
-      <Link href="/contact" className={`${!inNavbar && "bg-white px-2 rounded-lg"} block py-2 hover:text-red-600`}>
+      <Link
+        href="/contact"
+        className={`${!inNavbar && "rounded-lg bg-white px-2"} block py-2 hover:text-red-600`}
+      >
         <div className={`${inNavbar && "items-center"} flex flex-col`}>
           <span>Əlaqə</span>
           {inNavbar && segment === "contact" && (
@@ -114,7 +119,10 @@ const BreadCrumpHeader = () => {
             <Fragment key={index}>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink className="text-black" href={"/" + array.slice(0, index + 1).join("/")}>
+                <BreadcrumbLink
+                  className="text-black"
+                  href={"/" + array.slice(0, index + 1).join("/")}
+                >
                   {routeToAzerbaijani(segment)}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -126,41 +134,43 @@ const BreadCrumpHeader = () => {
   );
 };
 
-export default function Navbar() {
+export default function Navbar({ user }: { user?: User }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
 
   return (
     <>
       <header className="flex items-center justify-between border-b p-4">
-        <Link href="/" className="md:ml-8 text-2xl font-bold text-red-600">
+        <Link href="/" className="text-2xl font-bold text-red-600 md:ml-8">
           <Image src={"/Logo.png"} alt="logo" width={140} height={45} />
         </Link>
         <nav className="hidden space-x-4 md:flex">
           <NavLinks inNavbar />
         </nav>
-        <div className="hidden md:flex items-center space-x-2">
-          <Link className="border border-black rounded-lg text-primaryApp font-semibold" href={"/auctions/create"}>
+        <div className="hidden items-center space-x-2 md:flex">
+          <Link
+            className="rounded-lg border border-black font-semibold text-primaryApp"
+            href={"/auctions/create"}
+          >
             <Button className="font-semibold" variant="ghost" size="sm">
               Elan et
             </Button>
           </Link>
-          <ClerkLoaded>
-            <>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-              <SignedOut>
-                <SignInButton>
-                  <Button className="cursor-pointer" variant="destructive" size="sm">
-                    Daxil ol
-                  </Button>
-                </SignInButton>
-              </SignedOut>
-            </>
-          </ClerkLoaded>
-          <ClerkLoading>
-            <Skeleton className="h-8 w-8 rounded-full" />
-          </ClerkLoading>
+
+          <>
+            {user && <>{user.email}</>}
+            {!user && (
+              <Button
+                className="cursor-pointer"
+                variant="destructive"
+                size="sm"
+                onClick={() => router.push("/auth/login")}
+              >
+                Daxil ol
+              </Button>
+            )}
+          </>
         </div>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -170,37 +180,40 @@ export default function Navbar() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-full md:hidden bg-gray-100">
+          <SheetContent className="w-full bg-gray-100 md:hidden">
             <div className="flex h-full flex-col">
               <div className="mb-8">
-                <Image className="mx-auto" src={"/Logo.png"} alt="logo" width={140} height={45} />
+                <Image
+                  className="mx-auto"
+                  src={"/Logo.png"}
+                  alt="logo"
+                  width={140}
+                  height={45}
+                />
               </div>
               <nav className="flex flex-col space-y-4">
                 <NavLinks />
               </nav>
               <div className="mt-auto space-y-4">
-                <Button className="border mr-6 border-black rounded-lg text-primaryApp font-semibold" variant="ghost">
+                <Button
+                  className="mr-6 rounded-lg border border-black font-semibold text-primaryApp"
+                  variant="ghost"
+                >
                   Elan et
                 </Button>
-                <ClerkLoaded>
-                  <>
-                    <SignedIn>
-                      <div className="flex w-full justify-center">
-                        <UserButton />
-                      </div>
-                    </SignedIn>
-                    <SignedOut>
-                      <SignInButton>
-                        <Button variant="destructive" size="sm">
-                          Daxil ol
-                        </Button>
-                      </SignInButton>
-                    </SignedOut>
-                  </>
-                </ClerkLoaded>
-                <ClerkLoading>
-                  <Skeleton className="h-8 w-8 rounded-full" />
-                </ClerkLoading>
+                <>
+                  {user && <>{user.email}</>}
+                  {!user && (
+                    <Button
+                      className="cursor-pointer"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => router.push("/auth/login")}
+                    >
+                      Daxil ol
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
           </SheetContent>

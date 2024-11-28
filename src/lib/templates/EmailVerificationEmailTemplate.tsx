@@ -11,22 +11,23 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { User } from "better-auth";
 import * as React from "react";
 
-interface WelcomeEmailProps {
-  fullName: string;
-  email: string;
-  message: string;
+interface EmailVerificationProps {
+  user: User;
+  url: string;
+  token: string;
 }
 
-export const WelcomeEmail = ({
-  fullName,
-  email,
-  message,
-}: WelcomeEmailProps) => (
+export const EmailVerification = ({
+  token,
+  url,
+  user,
+}: EmailVerificationProps) => (
   <Html>
     <Head />
-    <Preview>Welcome to AUTOME.AZ - Your Ultimate Car Marketplace</Preview>
+    <Preview>Verify your email for AUTOME.AZ</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
@@ -37,35 +38,22 @@ export const WelcomeEmail = ({
           style={logo}
         />
         <Section style={headerSection}>
-          <Heading style={h1}>Welcome to AUTOME.AZ</Heading>
-          <Text style={text}>Your Ultimate Car Marketplace</Text>
+          <Heading style={h1}>Email Verification</Heading>
         </Section>
         <Hr style={hr} />
         <Section>
-          <Text style={text}>Hello {fullName},</Text>
-          <Text style={text}>Email {email},</Text>
-          <Text style={text}>Message:</Text>
-          <Text style={text}>{message}</Text>
+          <Text style={text}>Hello {user.name},</Text>
           <Text style={text}>
-            We&apos;re thrilled to welcome you to AUTOME.AZ, the premier destination
-            for buying and selling cars in Azerbaijan. Whether you&apos;re looking
-            for your dream car or wanting to sell your current vehicle, we&apos;ve
-            got you covered.
+            Thank you for registering on AUTOME.AZ! To complete your sign-up,
+            please verify your email address by clicking the button below:
           </Text>
-          <Text style={text}>Here&apos;s what you can do on AUTOME.AZ:</Text>
-          <ul>
-            <li style={listItem}>Browse thousands of car listings</li>
-            <li style={listItem}>Post your own car for sale</li>
-            <li style={listItem}>Compare prices and features</li>
-            <li style={listItem}>Connect with buyers and sellers</li>
-          </ul>
-          <Text style={text}>
-            Ready to get started? Click the button below to explore our latest
-            listings:
-          </Text>
-          <Link href="https://autome.az/" style={button}>
-            View Latest Listings
+          <Link href={url} style={button}>
+            Verify Email Address
           </Link>
+          <Text style={text}>
+            If you did not sign up for AUTOME.AZ, you can safely ignore this
+            email.
+          </Text>
         </Section>
         <Hr style={hr} />
         <Section>
@@ -80,7 +68,7 @@ export const WelcomeEmail = ({
   </Html>
 );
 
-export default WelcomeEmail;
+export default EmailVerification;
 
 const main = {
   backgroundColor: "#f6f9fc",
@@ -122,11 +110,6 @@ const text = {
   fontSize: "16px",
   lineHeight: "24px",
   textAlign: "left" as const,
-};
-
-const listItem = {
-  ...text,
-  marginBottom: "10px",
 };
 
 const button = {

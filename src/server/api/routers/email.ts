@@ -1,11 +1,8 @@
 import { z } from "zod";
-import { Resend } from "resend";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { env } from "~/env";
 import { TRPCError } from "@trpc/server";
 import WelcomeEmail from "~/lib/templates/SellerCustomerEmailTemplate";
-
-const resend = new Resend(env.RESEND_API_KEY);
+import { resend } from "~/server/resend";
 
 export const emailRouter = createTRPCRouter({
   send: protectedProcedure

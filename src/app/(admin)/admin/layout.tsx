@@ -1,14 +1,14 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
+import { getServerSideAuth } from "~/server/auth";
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  auth().protect();
-  const user = await currentUser();
+  const session = await getServerSideAuth(headers());
 
-  if (user?.privateMetadata.admin) {
+  if (session?.user.role === "admin") {
     return <>{children}</>;
   }
 

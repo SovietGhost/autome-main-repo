@@ -1,4 +1,4 @@
-import { Bid } from "@prisma/client";
+import { Auction, Bid } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
@@ -168,7 +168,7 @@ export const auctionRouter = createTRPCRouter({
         sideImageUrl,
       } = input;
 
-      console.log(input)
+      console.log(input);
 
       const auction = await ctx.db.auction.create({
         data: {
@@ -197,7 +197,7 @@ export const auctionRouter = createTRPCRouter({
           image_urls: otherImageUrl
             ? [frontImageUrl, backImageUrl, sideImageUrl, otherImageUrl]
             : [frontImageUrl, backImageUrl, sideImageUrl],
-          owner_id: ctx.auth.userId,
+          owner_id: ctx.auth.user.id,
           enabled: false,
         },
       });
@@ -214,30 +214,43 @@ export const auctionRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { auth } = ctx;
+      let auction: {
+        bids: {
+          amount: number;
+          user_id: string;
+        }[];
+      } & Auction;
 
-      const auction = await ctx.db.auction.findUniqueOrThrow({
-        where: {
-          id: input.auctionId,
-          end_date: {
-            gte: new Date(),
-          },
-          enabled: true,
-        },
-        include: {
-          bids: {
-            orderBy: {
-              amount: "desc",
+      try {
+        auction = await ctx.db.auction.findUniqueOrThrow({
+          where: {
+            id: input.auctionId,
+            end_date: {
+              gte: new Date(),
             },
-            take: 1,
-            select: {
-              amount: true,
-              user_id: true,
+            enabled: true,
+          },
+          include: {
+            bids: {
+              orderBy: {
+                amount: "desc",
+              },
+              take: 1,
+              select: {
+                amount: true,
+                user_id: true,
+              },
             },
           },
-        },
-      });
+        });
+      } catch (error) {
+        throw new TRPCError({
+          message: "Təklif yaradarkən xəta baş verdi",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
 
-      if (auction.owner_id === auth.userId) {
+      if (auction.owner_id === auth.user.id) {
         throw new TRPCError({
           message: "Öz elanınıza təklif verə bilməzsiniz",
           code: "FORBIDDEN",
@@ -246,7 +259,7 @@ export const auctionRouter = createTRPCRouter({
 
       // if the last bid was made by the same user, we don't allow them to bid again
 
-      if (auction.bids[0] && auction.bids[0].user_id === auth.userId) {
+      if (auction.bids[0] && auction.bids[0].user_id === auth.user.id) {
         throw new TRPCError({
           message: "Siz artıq ən yüksək təklifi vermisiniz",
           code: "FORBIDDEN",
@@ -279,7 +292,7 @@ export const auctionRouter = createTRPCRouter({
         bid = await ctx.db.bid.create({
           data: {
             amount: input.amount,
-            user_id: auth.userId,
+            user_id: auth.user.id,
             auction_id: auction.id,
             enabled: true,
           },

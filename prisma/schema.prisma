@@ -2,60 +2,136 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Auction {
-    id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-    name                          String   @unique
-    model                         String
-    brand                         String
-    category                      String
-    car_year                      Int
-    engine_vol                    Float
-    fuel_type                     String
-    location                      String
-    engine                        String
-    segment                       String
-    leading                       String
-    trailing                      String
-    brake_system                  String
-    color                         String
-    km                            BigInt
-    vin                           String
-    insurance_paper_url           String
-    techinal_inspection_paper_url String
-    start_price                   Float
-    description                   String
-    image_urls                    String[]
+  name                          String   @unique
+  model                         String
+  brand                         String
+  category                      String
+  car_year                      Int
+  engine_vol                    Float
+  fuel_type                     String
+  location                      String
+  engine                        String
+  segment                       String
+  leading                       String
+  trailing                      String
+  brake_system                  String
+  color                         String
+  km                            BigInt
+  vin                           String
+  insurance_paper_url           String
+  techinal_inspection_paper_url String
+  start_price                   Float
+  description                   String
+  image_urls                    String[]
 
-    start_date DateTime
-    end_date   DateTime
+  start_date DateTime
+  end_date   DateTime
 
-    owner_id String
-    bids     Bid[]
+  owner    User   @relation(fields: [owner_id], references: [id])
+  owner_id String
+  bids     Bid[]
 
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    enabled    Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  enabled    Boolean  @default(false)
 }
 
 model Bid {
-    id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-    amount Float
+  amount Float
 
-    user_id    String
-    auction_id Int
-    auction    Auction @relation(fields: [auction_id], references: [id])
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
 
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    enabled    Boolean  @default(true)
+  auction_id Int
+  auction    Auction @relation(fields: [auction_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  enabled    Boolean  @default(true)
+}
+
+model User {
+  id                  String    @id
+  name                String
+  email               String
+  emailVerified       Boolean
+  image               String?
+  createdAt           DateTime
+  updatedAt           DateTime
+  role                String?
+  banned              Boolean?
+  banReason           String?
+  banExpires          DateTime?
+  phoneNumber         String?
+  phoneNumberVerified Boolean?
+  username            String?
+  Session             Session[]
+  Account             Account[]
+  
+  Bid                 Bid[]
+  Auction             Auction[]
+
+  @@unique([email])
+  @@unique([phoneNumber])
+  @@unique([username])
+  @@map("user")
+}
+
+model Session {
+  id             String   @id
+  expiresAt      DateTime
+  token          String
+  createdAt      DateTime
+  updatedAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }

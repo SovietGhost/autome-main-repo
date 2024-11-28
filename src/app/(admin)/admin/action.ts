@@ -1,14 +1,15 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 
-export async function enableAuction(id: number) {
-  auth().protect();
-  const user = await currentUser();
+import { headers } from "next/headers";
+import { getServerSideAuth } from "~/server/auth";
 
-  if (!user?.privateMetadata.admin) {
+export async function enableAuction(id: number) {
+  const session = await getServerSideAuth(headers());
+
+  if (session?.user.role !== "admin") {
     throw new Error("Access denied");
   }
 
@@ -25,10 +26,9 @@ export async function enableAuction(id: number) {
 }
 
 export async function disableAuction(id: number) {
-  auth().protect();
-  const user = await currentUser();
+  const session = await getServerSideAuth(headers());
 
-  if (!user?.privateMetadata.admin) {
+  if (session?.user.role !== "admin") {
     throw new Error("Access denied");
   }
 
