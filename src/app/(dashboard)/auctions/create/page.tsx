@@ -55,7 +55,6 @@ export default async function Page() {
 
   return (
     <>
-      <Banner />
       <main className="bg-[#F8F8F8] py-6 md:py-[50px]">
         <div className="flex flex-col gap-1 text-center">
           <span className="text-red-600">Vaxt itirmədən indi başla</span>

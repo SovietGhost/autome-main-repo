@@ -49,10 +49,10 @@ export default function VinForm() {
         >
           VİN
         </label>
-        <div className="flex items-center">
+        <div className="flex items-baseline">
           <Input
             id="vin_code"
-            className="block w-full rounded-l-lg rounded-r-none border-r-0"
+            className="block w-full rounded-l-lg rounded-r-none border-r-0 focus-visible:ring-offset-0 focus:outline-none"
             placeholder="Avtomobilin təfərrüatlarını yoxlamaq üçün VIN kodunu daxil edin"
             required
             name="vin"

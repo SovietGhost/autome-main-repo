@@ -16,15 +16,11 @@ export default async function Page({
 
   return (
     <>
-      <Banner />
       <div className="bg-[#FAFAFA]">
         <main className="container mx-auto px-4 py-8">
-          <h1 className="mb-2 text-center text-3xl font-bold">
+          <h1 className="mb-6 text-center text-3xl font-bold">
             Hərracları kəşf et
           </h1>
-          <p className="mb-8 text-center text-gray-500">
-            Növbəti hərracı hara etməyi istədiyinizə qərar verin!
-          </p>
           <AuctionGrid
             isHome={false}
             initialData={auctions.items}

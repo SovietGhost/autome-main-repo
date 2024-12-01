@@ -153,7 +153,7 @@ export default function Navbar({ user }: { user?: User }) {
             className="rounded-lg border border-black font-semibold text-primaryApp"
             href={"/auctions/create"}
           >
-            <Button className="font-semibold" variant="ghost" size="sm">
+            <Button className="font-semibold hover:bg-black hover:text-white" variant="ghost" size="sm">
               Elan et
             </Button>
           </Link>
@@ -196,7 +196,7 @@ export default function Navbar({ user }: { user?: User }) {
               </nav>
               <div className="mt-auto space-y-4">
                 <Button
-                  className="mr-6 rounded-lg border border-black font-semibold text-primaryApp"
+                  className="mr-6 rounded-lg border border-black font-semibold text-primaryApp hover:text-hoverPrimary"
                   variant="ghost"
                 >
                   Elan et
@@ -205,8 +205,7 @@ export default function Navbar({ user }: { user?: User }) {
                   {user && <>{user.email}</>}
                   {!user && (
                     <Button
-                      className="cursor-pointer"
-                      variant="destructive"
+                      className="cursor-pointer hover:text-hoverPrimary"
                       size="sm"
                       onClick={() => router.push("/auth/login")}
                     >

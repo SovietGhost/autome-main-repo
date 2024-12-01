@@ -50,6 +50,7 @@
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.5",
     "react-email": "^3.0.1",
+    "react-hook-form": "^7.53.2",
     "redis": "^4.7.0",
     "resend": "^4.0.0",
     "server-only": "^0.0.1",
