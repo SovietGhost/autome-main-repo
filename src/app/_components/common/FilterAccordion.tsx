@@ -18,7 +18,7 @@ function FilterAccordion({ open, onClose }: { open: any, onClose: () => any }) {
           <CircleX onClick={onClose} />
         </div>
       }
-      <Accordion type="single" collapsible>
+      <Accordion className='border-none' type="single" collapsible>
         <AccordionItem className='border border-[#E3E2FF] rounded-t' value="item-1">
           <AccordionTrigger className='font-medium px-4 hover:bg-hoverWhite duration-300"'>İstehsalçı</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-2 px-4 pt-3">

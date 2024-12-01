@@ -63,7 +63,7 @@ export default function AuctionGrid({
     <>
       {isLoading && <CarAuctionGridSkeleton />}
       <div className='flex flex-wrap gap-8 relative'>
-        {!isHome && <div className={`${isOpen ? "block md:hidden absolute -top-56" : "hidden md:block"} w-full md:w-[calc(30%-2rem)] bg-white rounded`}>
+        {!isHome && <div className={`${isOpen ? "block md:hidden absolute -top-48 w-full" : "hidden md:block"} w-full md:w-[calc(30%-2rem)] bg-white rounded`}>
           <FilterAccordion onClose={handleClose} open={isOpen} />
         </div>}
         <div className='w-full md:w-[calc(70%)]'>
