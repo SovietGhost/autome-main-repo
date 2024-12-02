@@ -21,6 +21,7 @@ import {
 
 import type { User } from "better-auth";
 import { useRouter } from "next/navigation";
+import { UserButton } from "../auth/UserButton";
 
 const NavLinks = ({ inNavbar }: { inNavbar?: boolean }) => {
   const segment = useSelectedLayoutSegment();
@@ -153,13 +154,17 @@ export default function Navbar({ user }: { user?: User }) {
             className="rounded-lg border border-black font-semibold text-primaryApp"
             href={"/auctions/create"}
           >
-            <Button className="font-semibold hover:bg-black hover:text-white" variant="ghost" size="sm">
+            <Button
+              className="font-semibold hover:bg-black hover:text-white"
+              variant="ghost"
+              size="sm"
+            >
               Elan et
             </Button>
           </Link>
 
           <>
-            {user && <>{user.email}</>}
+            {user && <UserButton user={user} />}
             {!user && (
               <Button
                 className="cursor-pointer"
@@ -202,7 +207,7 @@ export default function Navbar({ user }: { user?: User }) {
                   Elan et
                 </Button>
                 <>
-                  {user && <>{user.email}</>}
+                  {user && <UserButton user={user} />}
                   {!user && (
                     <Button
                       className="cursor-pointer hover:text-hoverPrimary"

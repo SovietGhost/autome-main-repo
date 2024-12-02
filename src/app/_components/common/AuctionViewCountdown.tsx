@@ -1,8 +1,11 @@
 "use client";
 
-import { Auction } from "@prisma/client";
+import Countdown from "react-countdown";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Confetti } from "./Confetti";
+import { api } from "~/trpc/react";
 
 interface CountdownProps {
   days: number;
@@ -23,26 +26,49 @@ function getCountdownFromDate(date: Date): CountdownProps {
   return { days, hours, minutes, seconds };
 }
 
+function getDateFromCountdown(countdown: CountdownProps): Date {
+  const now = new Date();
+  const { days, hours, minutes, seconds } = countdown;
+
+  const totalMilliseconds =
+    days * 24 * 60 * 60 * 1000 +
+    hours * 60 * 60 * 1000 +
+    minutes * 60 * 1000 +
+    seconds * 1000;
+
+  return new Date(now.getTime() + totalMilliseconds);
+}
+
 export default function AuctionViewCountdown({
-  auction,
+  date,
+  auctionId,
 }: {
-  auction: Auction;
+  date: Date;
+  auctionId: number;
 }) {
-  const [countdown, setCountdown] = useState<CountdownProps>(
-    getCountdownFromDate(auction.end_date),
-  );
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown(getCountdownFromDate(auction.end_date));
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const { data: didWon } = api.auction.didUserWonAuction.useQuery({
+    auctionId,
+  });
 
   return (
-    <div className="!text-black">
-      <CountdownTimer {...countdown} black />
-    </div>
+    <Countdown
+      date={date}
+      renderer={(date) => {
+        const { days, hours, minutes, seconds, completed } = date;
+        return completed ? (
+          didWon ? (
+            <Confetti duration={4000} />
+          ) : null
+        ) : (
+          <CountdownTimer
+            days={days}
+            hours={hours}
+            minutes={minutes}
+            seconds={seconds}
+            black
+          />
+        );
+      }}
+    />
   );
 }

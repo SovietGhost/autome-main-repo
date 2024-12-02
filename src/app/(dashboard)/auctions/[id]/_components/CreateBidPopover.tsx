@@ -13,14 +13,14 @@ import { api } from "~/trpc/react";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 
-export default function CreateBidPopover({ auctionId }: { auctionId: number }) {
+export default function CreateBidPopover({ auctionId, refetch }: { auctionId: number, refetch: Function }) {
   const router = useRouter();
   const [amount, setAmount] = useState("0");
   const [open, setOpen] = useState(false);
   const mutation = api.auction.createBid.useMutation({
     onSuccess: () => {
       setOpen(false);
-      router.refresh();
+      refetch();
     },
     onError(error, variables, context) {
       toast(error.message[0] === "[" ? "Xəta baş verdi" : error.message);

@@ -1,11 +1,7 @@
-import Sidebar from "./_components/ProfileSidebar"
-
 export default function ProfileLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }) {
-    return <section>
-        {children}
-    </section>
+  return <section>{children}</section>;
 }

@@ -1,35 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-} from "~/components/ui/card";
+import { Card, CardFooter, CardHeader } from "~/components/ui/card";
 import { Heart, Share2 } from "lucide-react";
 import { Auction } from "@prisma/client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { env } from "~/env";
 
+import Countdown from "react-countdown";
+
 const CountdownTimer = dynamic(() => import("./CountdownCard"), { ssr: false });
-
-interface CountdownProps {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-function getCountdownFromDate(date: Date): CountdownProps {
-  const now = new Date();
-  const diff = date.getTime() - now.getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-  return { days, hours, minutes, seconds };
-}
 
 export default function AuctionCard({
   auction,
@@ -40,19 +21,13 @@ export default function AuctionCard({
     }[];
   };
 }) {
-  // Replace this with your actual target date
-
-  const [countdown, setCountdown] = useState<CountdownProps>(
-    getCountdownFromDate(auction.end_date),
-  );
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown(getCountdownFromDate(auction.end_date));
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, []);
+  const handleShare = async () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(
+        window.location.origin + "/auctions/" + auction.id,
+      );
+    }
+  };
 
   return (
     <Card className="w-full overflow-hidden rounded-lg border border-gray-200">
@@ -63,22 +38,31 @@ export default function AuctionCard({
           className="h-[200px] w-full object-cover"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-          <CountdownTimer {...countdown} />
+          <Countdown
+            date={auction.end_date}
+            renderer={({ completed, days, hours, minutes, seconds }) => {
+              return completed ? null : (
+                <CountdownTimer
+                  days={days}
+                  hours={hours}
+                  minutes={minutes}
+                  seconds={seconds}
+                />
+              );
+            }}
+          />
         </div>
-        <button className="absolute right-2 top-2 text-white">
-          <Heart className="h-6 w-6" />
-        </button>
       </CardHeader>
       <CardFooter className="flex flex-col items-start bg-white p-4">
         <div>
           <h3 className="mb-1 text-lg font-semibold">{auction.name}</h3>
           <div>₼{auction.bids[0]?.amount ?? auction.start_price}</div>
         </div>
-        <div className="flex space-x-2 mt-2">
+        <div className="mt-2 flex space-x-2">
           <Link href={`/auctions/${auction.id}`}>
-          <Button variant="destructive">Daxil ol →</Button>
+            <Button variant="destructive">Daxil ol →</Button>
           </Link>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" onClick={handleShare}>
             <Share2 className="h-4 w-4" />
           </Button>
         </div>

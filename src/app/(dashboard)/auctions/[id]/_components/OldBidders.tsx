@@ -6,6 +6,7 @@ import { client } from "~/server/pusher/client";
 import { api } from "~/trpc/react";
 
 export default function OldBidders({ id }: { id: number }) {
+  const [audio] = useState(new Audio("/bid-notification.mp3"))
   const [channel, setChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function OldBidders({ id }: { id: number }) {
   useEffect(() => {
     if (channel) {
       channel.bind("new-bid", () => {
+        audio.play();
         refetch();
       });
     }
@@ -41,7 +43,7 @@ export default function OldBidders({ id }: { id: number }) {
       <ul>
         {bidders.map((bid, index) => (
           <li key={index}>
-            {bid.amount} - {bid.user_id}
+            {bid.amount} - {bid.user.name}
           </li>
         ))}
       </ul>

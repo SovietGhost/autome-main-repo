@@ -1,5 +1,4 @@
-import { createClient } from "redis";
+import { Redis } from "ioredis";
 
-export const redis = createClient({
-    url: "redis://localhost:6379"
-});
+export const pubRedis = Redis.createClient();
+export const subRedis = Redis.createClient();

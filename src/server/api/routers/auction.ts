@@ -52,13 +52,14 @@ export const auctionRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
   get: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
     const auction = await ctx.db.auction.findUniqueOrThrow({
       where: {
         id: input,
-        end_date: {
-          gte: new Date(),
-        },
+        // end_date: {
+        //   gte: new Date(),
+        // },
         enabled: true,
       },
       include: {
@@ -77,6 +78,74 @@ export const auctionRouter = createTRPCRouter({
 
     return auction;
   }),
+
+  listUserCreatedAuctions: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().optional(),
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { cursor, limit = 12 } = input;
+
+      const items = await ctx.db.auction.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        cursor: cursor ? { id: cursor } : undefined,
+        where: {
+          owner_id: ctx.auth.user.id,
+          enabled: true,
+        },
+      });
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
+
+  listUserCompetedAuctions: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().optional(),
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { cursor, limit = 12 } = input;
+
+      const items = await ctx.db.auction.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        cursor: cursor ? { id: cursor } : undefined,
+        where: {
+          bids: {
+            some: {
+              user_id: ctx.auth.user.id,
+            },
+          },
+          enabled: true,
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
+
   getLastFiveBids: publicProcedure
     .input(z.number())
     .query(async ({ ctx, input }) => {
@@ -88,6 +157,13 @@ export const auctionRouter = createTRPCRouter({
         where: {
           auction_id: input,
           enabled: true,
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
 
@@ -221,102 +297,164 @@ export const auctionRouter = createTRPCRouter({
         }[];
       } & Auction;
 
-      try {
-        auction = await ctx.db.auction.findUniqueOrThrow({
-          where: {
-            id: input.auctionId,
-            end_date: {
-              gte: new Date(),
-            },
-            enabled: true,
-          },
-          include: {
-            bids: {
-              orderBy: {
-                amount: "desc",
+      return ctx.db.$transaction(async (tx) => {
+        try {
+          auction = await tx.auction.findUniqueOrThrow({
+            where: {
+              id: input.auctionId,
+              end_date: {
+                gte: new Date(),
               },
-              take: 1,
-              select: {
-                amount: true,
-                user_id: true,
+              enabled: true,
+            },
+            include: {
+              bids: {
+                orderBy: {
+                  amount: "desc",
+                },
+                take: 1,
+                select: {
+                  amount: true,
+                  user_id: true,
+                },
               },
             },
-          },
-        });
-      } catch (error) {
-        throw new TRPCError({
-          message: "Təklif yaradarkən xəta baş verdi",
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+          });
+        } catch (error) {
+          throw new TRPCError({
+            message: "Təklif yaradarkən xəta baş verdi",
+            code: "INTERNAL_SERVER_ERROR",
+          });
+        }
 
-      if (auction.owner_id === auth.user.id) {
-        throw new TRPCError({
-          message: "Öz elanınıza təklif verə bilməzsiniz",
-          code: "FORBIDDEN",
-        });
-      }
+        if (auction.owner_id === auth.user.id) {
+          throw new TRPCError({
+            message: "Öz elanınıza təklif verə bilməzsiniz",
+            code: "FORBIDDEN",
+          });
+        }
 
-      // if the last bid was made by the same user, we don't allow them to bid again
+        // if the last bid was made by the same user, we don't allow them to bid again
 
-      if (auction.bids[0] && auction.bids[0].user_id === auth.user.id) {
-        throw new TRPCError({
-          message: "Siz artıq ən yüksək təklifi vermisiniz",
-          code: "FORBIDDEN",
-        });
-      }
+        if (auction.bids[0] && auction.bids[0].user_id === auth.user.id) {
+          throw new TRPCError({
+            message: "Siz artıq ən yüksək təklifi vermisiniz",
+            code: "FORBIDDEN",
+          });
+        }
 
-      if (
-        (auction.bids[0] && auction.bids[0].amount >= input.amount) ||
-        input.amount < auction.start_price
-      ) {
-        throw new TRPCError({
-          message: "Yeni təklif ən yüksək təklifdən böyük olmalıdır",
-          code: "FORBIDDEN",
-        });
-      }
+        if (
+          (auction.bids[0] && auction.bids[0].amount >= input.amount) ||
+          input.amount < auction.start_price
+        ) {
+          throw new TRPCError({
+            message: "Yeni təklif ən yüksək təklifdən böyük olmalıdır",
+            code: "FORBIDDEN",
+          });
+        }
 
-      if (
-        (auction.bids[0] && input.amount - auction.bids[0].amount < 50) ||
-        input.amount - auction.start_price < 50
-      ) {
-        throw new TRPCError({
-          message: "Yeni təklif ən yüksək təklifdən 50 AZN-dən çox olmalıdır",
-          code: "FORBIDDEN",
-        });
-      }
+        if (
+          (auction.bids[0] && input.amount - auction.bids[0].amount < 50) ||
+          input.amount - auction.start_price < 50
+        ) {
+          throw new TRPCError({
+            message: "Yeni təklif ən yüksək təklifdən 50 AZN-dən çox olmalıdır",
+            code: "FORBIDDEN",
+          });
+        }
 
-      let bid: Bid;
+        let bid: Bid;
 
-      try {
-        bid = await ctx.db.bid.create({
-          data: {
-            amount: input.amount,
-            user_id: auth.user.id,
-            auction_id: auction.id,
-            enabled: true,
-          },
-        });
-      } catch (error) {
-        console.error(error);
-        throw new TRPCError({
-          message: "Təklif verilərkən xəta baş verdi",
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+        try {
+          bid = await tx.bid.create({
+            data: {
+              amount: input.amount,
+              user_id: auth.user.id,
+              auction_id: auction.id,
+              enabled: true,
+            },
+          });
+          await tx.auction.update({
+            where: {
+              id: input.auctionId,
+            },
+            data: {
+              end_date: new Date(auction.end_date.getTime() + 15_000),
+            },
+          });
+        } catch (error) {
+          console.error(error);
+          throw new TRPCError({
+            message: "Təklif verilərkən xəta baş verdi",
+            code: "INTERNAL_SERVER_ERROR",
+          });
+        }
 
-      console.log(`auction-${auction.id}`, "new-bid", {});
+        console.log(`auction-${auction.id}`, "new-bid", {});
 
-      try {
-        await pusher.trigger(`auction-${auction.id}`, "new-bid", {});
-      } catch (error) {
-        console.error(error);
-        throw new TRPCError({
-          message: "Təklif verilərkən xəta baş verdi",
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+        try {
+          await pusher.trigger(`auction-${auction.id}`, "new-bid", {});
+        } catch (error) {
+          console.error(error);
+          throw new TRPCError({
+            message: "Təklif verilərkən xəta baş verdi",
+            code: "INTERNAL_SERVER_ERROR",
+          });
+        }
 
-      return bid;
+        return bid;
+      });
     }),
+
+  didUserWonAuction: protectedProcedure
+    .input(
+      z.object({
+        auctionId: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const bid = await ctx.db.bid.findFirst({
+        where: {
+          auction: {
+            id: input.auctionId,
+            enabled: true,
+            end_date: {
+              lte: new Date(),
+            },
+          },
+        },
+        orderBy: {
+          created_at: "desc",
+        },
+        take: 1,
+      });
+
+      return !!bid;
+    }),
+
+  userWonAuctions: protectedProcedure.query(async ({ ctx }) => {
+    const wonAuctions = await ctx.db.auction.findMany({
+      where: {
+        bids: {
+          some: {
+            user_id: ctx.auth.user.id,
+          },
+        },
+      },
+      include: {
+        bids: {
+          orderBy: {
+            created_at: "desc",
+          },
+          take: 1,
+        },
+      },
+    });
+
+    const auctionsWon = wonAuctions.filter(
+      (auction) => auction.bids[0]?.user_id === ctx.auth.user.id,
+    );
+
+    return auctionsWon;
+  }),
 });

@@ -24,13 +24,6 @@ function Sidebar() {
                             Şifrə dəyişikliyi
                         </Link>
                     </li>
-                    <li className="py-4">
-                        <Link href="/profile/card-info"
-                            className={`${currentPath === "/profile/card-info" ? "text-black border-l-2 border-l-black" : ""} text-[#828091] pl-4 }`}
-                        >
-                            Kart məlumatları
-                        </Link>
-                    </li>
                 </div>
                 <div className="border my-2" />
                 <div>
@@ -63,13 +56,6 @@ function Sidebar() {
                             className={`${currentPath === "/profile/win-auctions" ? "text-black border-l-2 border-l-black" : ""} text-[#828091] pl-4 }`}
                         >
                             Qazanılmış hərraclar
-                        </Link>
-                    </li>
-                    <li className="py-4">
-                        <Link href="/profile/win-auctions"
-                            className={`${currentPath === "/profile/win-auctions" ? "text-black border-l-2 border-l-black" : ""} text-[#828091] pl-4 }`}
-                        >
-                            Qazanılmamış hərraclar
                         </Link>
                     </li>
                     <li className="py-4">

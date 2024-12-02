@@ -80,7 +80,6 @@ model User {
   username            String?
   Session             Session[]
   Account             Account[]
-  
   Bid                 Bid[]
   Auction             Auction[]
 
